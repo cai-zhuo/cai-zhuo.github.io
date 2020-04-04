@@ -1,0 +1,242 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Javascript 技巧收集 | Gridea</title>
+<link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1585973648093">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://c739557637.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="Javascript 技巧收集 | Gridea - Atom Feed" href="https://c739557637.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="
+
+js通过valueOf获取引用类型的数字，toString获取引用类型的字符串
+
+
+Math.floor (4.9) === 4
+~~   4.9 ===  4
+~~ - 4.9 === -5
+
+
+取整 | 0
+1.3 | 0 === ..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://c739557637.github.io">
+  <img class="avatar" src="https://c739557637.github.io/images/avatar.png?v=1585973648093" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    看着自己
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          笔记
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              Javascript 技巧收集
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-04
+              </span>
+              <span>
+                1 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <ol>
+<li>
+<p>js通过valueOf获取引用类型的数字，toString获取引用类型的字符串</p>
+</li>
+<li>
+<p>Math.floor (4.9) === 4</p>
+<p>~~   4.9 ===  4</p>
+<p>~~ - 4.9 === -5</p>
+</li>
+<li>
+<p>取整 | 0</p>
+<p>1.3 | 0 ===  1</p>
+<p>-1.3 | 0 === -1</p>
+</li>
+<li>
+<p>判断奇偶数</p>
+<p>const num = 3</p>
+<p>!! (num &amp; 1) === true</p>
+<p>!! (num % 2) === true</p>
+</li>
+<li>
+<p>强制参数（mandatory）</p>
+<pre><code class="language-js">const mandatory = ()=&gt;{
+    throw new Error('Missing Parameter!')
+}
+
+const foo = (bar = mandatory())=&gt;{
+    return bar;
+}
+</code></pre>
+</li>
+<li>
+<p>惰性载入函数</p>
+<p>通过覆写函数，使得下一次不用再进行判断</p>
+<pre><code class="language-js">function foo(){
+    if(a != b){
+        console.log('a')
+    }else{
+        console.log('b')
+    }
+}
+//优化后
+function foo(){
+    if(a != b){
+        foo = function(){
+            console.log('a')
+        }
+    }else{
+        foo = function(){
+            console.log('b')
+        }
+    }
+    foo();	// or return foo()
+}
+</code></pre>
+</li>
+<li>
+<p>一次性函数</p>
+<pre><code class="language-js">let foo = ()=&gt;{
+    console.log('1')
+    foo = ()=&gt;{
+        console.log('2')
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>按位取反巧用</p>
+<pre><code class="language-js">~ 0  === -1  //true
+~-1 ===   0 //true
+
+const arr = [1,2,3];
+~arr.indexOf(4) ? null :arr.push(4) ;
+</code></pre>
+</li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://c739557637.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

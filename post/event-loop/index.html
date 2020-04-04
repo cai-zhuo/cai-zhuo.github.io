@@ -1,0 +1,250 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>EVENT LOOP | Gridea</title>
+<link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1585973648093">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://c739557637.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="EVENT LOOP | Gridea - Atom Feed" href="https://c739557637.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="在JavaScript运行机制中，依赖EVENT LOOP，决定代码先后执行的顺序。
+Javascript执行过程
+
+执行栈内任务，遇到setTimeout，setImmediate，等API，将回调放入宏队列，遇到process.next..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://c739557637.github.io">
+  <img class="avatar" src="https://c739557637.github.io/images/avatar.png?v=1585973648093" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    看着自己
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          笔记
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              EVENT LOOP
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-04
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <h2 id="在javascript运行机制中依赖event-loop决定代码先后执行的顺序">在JavaScript运行机制中，依赖EVENT LOOP，决定代码先后执行的顺序。</h2>
+<p>Javascript执行过程</p>
+<ol>
+<li>执行栈内任务，遇到setTimeout，setImmediate，等API，将回调放入宏队列，遇到process.nextTick,Promise等，将回调放入微队列</li>
+<li>将微队列的任务逐个推入主线程，将遇到的API回调放入相应队列</li>
+<li>微队列空时并且栈空，将宏队列的任务逐个推到主线程</li>
+<li>宏队列空时，将微队列的任务推入主线程（在nodeJS中，宏队列的每个阶段执行完毕时，都会去执行微队列）</li>
+<li>直到所有队列任务执行完毕。</li>
+</ol>
+<ul>
+<li>
+<p>javaScript中。分为主线程（STACK），其他线程（WEB APIs,others），宏队列（macrotask），微队列(microtask)。</p>
+</li>
+<li>
+<p>区别</p>
+<ol>
+<li>
+<p>在浏览器中，微队列可以认为在宏队列之内</p>
+<img src="https://segmentfault.com/img/remote/1460000016278118?w=710&amp;h=749" alt="browser-eventloop" style="zoom: 67%;" />
+</li>
+<li>
+<p>在nodeJS中，微队列在宏队列之间，宏队列和微队列分为各个不同的队列</p>
+<p>各队列同样依靠一个循环来决定执行顺序。</p>
+<p><mark>宏队列</mark></p>
+<img src="https://segmentfault.com/img/remote/1460000016278121?w=951&amp;h=526" alt="node-eventloop" style="zoom: 80%;" />
+<p><mark>微队列</mark></p>
+ <img src="https://segmentfault.com/img/remote/1460000016278122?w=420&amp;h=433" alt="node-microtaskqueue" style="zoom: 80%;" /> 
+</li>
+<li>
+<p>在微队列中，NextTick QUeue优先于Other Micro Queue</p>
+</li>
+<li>
+<p>在微队列周期中，新的任务进入了队列，那么这个任务也将在这个周期执行，但在宏队列中不是。</p>
+</li>
+<li>
+<p>只有在栈空的时候才会考虑宏队列和微队列的任务</p>
+<p>所以在事件执行时，手动触发 和 代码执行执行的顺序会有区别</p>
+<pre><code class="language-js">div.addEventListener('click',()=&gt;{
+    Promise.resolve().then(()=&gt;{
+    	console.log(&quot;resolved&quot;);
+	})
+    setTimeout(()=&gt;{
+        console.log(&quot;timeout&quot;)
+    },0)
+})
+//方案1:
+//tap twice  ...
+//方案2:
+//click();
+//click()
+</code></pre>
+<p>结果如下</p>
+<ul>
+<li>
+<p>tap twice..</p>
+<blockquote>
+<p>resolved</p>
+<p>timeout</p>
+<p>resolved</p>
+<p>timeout</p>
+</blockquote>
+</li>
+<li>
+<p>run click() twice</p>
+<blockquote>
+<p>resolved</p>
+<p>resolved</p>
+<p>timeout</p>
+<p>timeout</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%9C%A8javascript%E8%BF%90%E8%A1%8C%E6%9C%BA%E5%88%B6%E4%B8%AD%E4%BE%9D%E8%B5%96event-loop%E5%86%B3%E5%AE%9A%E4%BB%A3%E7%A0%81%E5%85%88%E5%90%8E%E6%89%A7%E8%A1%8C%E7%9A%84%E9%A1%BA%E5%BA%8F">在JavaScript运行机制中，依赖EVENT LOOP，决定代码先后执行的顺序。</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://c739557637.github.io/post/javascript-ji-qiao-shou-ji/">
+              <h3 class="post-title">
+                Javascript 技巧收集
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://c739557637.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
