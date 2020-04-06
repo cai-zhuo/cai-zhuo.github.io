@@ -1,0 +1,331 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>实现一个简单的History模式的路由 | Gridea</title>
+<link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1586147178399">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://c739557637.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="实现一个简单的History模式的路由 | Gridea - Atom Feed" href="https://c739557637.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="用一个类来实现页面history模式路由。
+
+
+实现一个类
+class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.quer..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://c739557637.github.io">
+  <img class="avatar" src="https://c739557637.github.io/images/avatar.png?v=1586147178399" alt="">
+  </a>
+  <h1 class="site-title">
+    Gridea
+  </h1>
+  <p class="site-description">
+    看着自己
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          笔记
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="/post/about" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              实现一个简单的History模式的路由
+            </h2>
+            <div class="post-info">
+              <span>
+                2020-04-06
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>用一个类来实现页面history模式路由。</p>
+<ol>
+<li>
+<p>实现一个类</p>
+<pre><code class="language-js">class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.querySelectorAll(&quot;[href]&quot;)
+        this.view = document.querySelector('#router-view');
+    }
+    
+	route_to(event) {
+        //简单的监听a标签
+    	const path = event.target.getAttribute('href')
+        event.preventDefault();
+        history.pushState({
+        	[path]: path
+		}, null, path)
+    }
+    
+}
+</code></pre>
+</li>
+<li>
+<p>监听popState事件</p>
+<pre><code class="language-js">class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.querySelectorAll(&quot;[href]&quot;)
+        this.view = document.querySelector('#router-view');
+        window.onpopstate = this.watchPopState
+    }
+    
+	route_to(event) {
+        //简单的监听a标签
+    	const path = event.target.getAttribute('href')
+        event.preventDefault();
+        history.pushState({
+        	[path]: path
+		}, null, path)
+    }
+    
+    watchPopState() {
+        console.log('stoped')
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>由于 pushState 和 replaceState 方法不能被 popState 事件监听到，所以需要重写方法并实现监听</p>
+<pre><code class="language-js">class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.querySelectorAll('[href]')
+        this.view = document.querySelector('#router-view');
+        
+        window.onpopstate = this.watchPopState
+        //初始的history.State 为null
+		//个人猜测，在history路由下，Vue打包后需要Nginx重定向就是因为如此，
+        //刷新将找不到路径 / 下的资源
+        history.pushState({
+        	''/'':'/'
+		},null)
+        
+        history.pushState = this.registry_history_event('pushState');
+        history.replaceState = this.registry_history_event('replaceState');
+        
+        //使用bind是为了更方便的使用实例对象，在window上监听事件会将this指向window
+        //这里不能使用window.onpushstate,会失效，在window上并没有这个方法，不会触发事件的监听
+        window.addEventListener('pushState', this.onpushState.bind(this))
+		window.addEventListener('replaceState', this.onreplaceState.bind(this))
+    }
+    
+	route_to(event) {
+        //简单的监听a标签
+    	const path = event.target.getAttribute('href')
+        event.preventDefault();
+        //第二个参数是标题
+        //第三个参数是将路径加入到导航栏
+        history.pushState({
+        	[path]: path
+		}, null, path)
+    }
+    
+    watchPopState() {
+        console.log('stoped')
+    }
+    onpushState(event) {
+		console.log(&quot;pushed state&quot;)
+        this.view.innerHTML = event.arguments[2];
+	}
+
+	onreplaceState(event) {
+		console.log(&quot;replaced state&quot;)
+        this.view.innerHTML = event.arguments[2];
+    }
+    
+    registry_history_event(type) {
+		const origin_fun = history[type];
+		//origin_fun 执行的顺序将决定 事件回调和事件发生的先后顺序
+        //比如改为 return origin_fun.call(this,...arguments)
+        return function() {
+		const result = origin_fun.call(this, ...arguments);
+        	const e = new Event(type);
+            //将参数传给事件
+			e.arguments = arguments;
+            //在window对象上触发事件
+            window.dispatchEvent(e);
+            return result;
+	    }
+	}
+}
+</code></pre>
+</li>
+<li>
+<p>当自己想实现私有方法时，可以使用闭包</p>
+<pre><code class="language-js">const router = (()=&gt;{
+    const private_function = ()=&gt;{
+        //...
+    }
+    class Router{
+        //...
+    }
+    return new Router();
+}())
+</code></pre>
+</li>
+<li>
+<p>而私有变量的实现就灵活的多，可以使用Symbol，WeakSet，闭包</p>
+<pre><code class="language-js">//Symbol + 闭包
+const router = (()=&gt;{
+    const private_variable = Symbol();
+    class Router{
+        [private_variable] = &quot;some value&quot;
+        //...
+    }
+    return new Router();
+}())
+</code></pre>
+<pre><code class="language-js">//WeakMap + 闭包
+const router = (()=&gt;{
+    const private_variable = new WeakMap()
+    class Router{
+        constructor(){
+	        private_variable.set(&quot;key&quot;,&quot;value&quot;)
+        }
+    }
+    return new Router()
+}())
+</code></pre>
+</li>
+</ol>
+
+              </div>
+              <div class="toc-container">
+                
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://c739557637.github.io/post/http-ru-men/">
+              <h3 class="post-title">
+                HTTP入门
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+  <a class="rss" href="https://c739557637.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
