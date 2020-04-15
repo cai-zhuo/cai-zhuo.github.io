@@ -2,27 +2,23 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Javascript 技巧收集 | Gridea</title>
+<title>if块级作用域函数声明的副作用 | Gridea</title>
 <link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1586934946926">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://c739557637.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Javascript 技巧收集 | Gridea - Atom Feed" href="https://c739557637.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="if块级作用域函数声明的副作用 | Gridea - Atom Feed" href="https://c739557637.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="
-
-js通过valueOf获取引用类型的数字，toString获取引用类型的字符串
-
-
-Math.floor (4.9) === 4
-~~   4.9 ===  4
-~~ - 4.9 === -5
-
-
-取整 | 0
-1.3 | 0 === ..." />
+    <meta name="description" content="在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。
+var a = 1;
+if(true){
+    a = 2;
+    function a(){}
+    a = 3;
+}
+console.log(a) //..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -85,11 +81,11 @@ Math.floor (4.9) === 4
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              Javascript 技巧收集
+              if块级作用域函数声明的副作用
             </h2>
             <div class="post-info">
               <span>
-                2020-04-04
+                2020-04-15
               </span>
               <span>
                 1 min read
@@ -99,82 +95,41 @@ Math.floor (4.9) === 4
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <ol>
-<li>
-<p>js通过valueOf获取引用类型的数字，toString获取引用类型的字符串</p>
-</li>
-<li>
-<p>Math.floor (4.9) === 4</p>
-<p>~~   4.9 ===  4</p>
-<p>~~ - 4.9 === -5</p>
-</li>
-<li>
-<p>取整 | 0</p>
-<p>1.3 | 0 ===  1</p>
-<p>-1.3 | 0 === -1</p>
-</li>
-<li>
-<p>判断奇偶数</p>
-<p>const num = 3</p>
-<p>!! (num &amp; 1) === true</p>
-<p>!! (num % 2) === true</p>
-</li>
-<li>
-<p>强制参数（mandatory）</p>
-<pre><code class="language-js">const mandatory = ()=&gt;{
-    throw new Error('Missing Parameter!')
+                <p>在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。</p>
+<pre><code class="language-js">var a = 1;
+if(true){
+    a = 2;
+    function a(){}
+    a = 3;
+}
+console.log(a) // a = 2;
+</code></pre>
+<p>一般我们默认为，function a (){}  语句 会提升到块级作用域的顶端</p>
+<pre><code class="language-js">var a = 1;
+if(true){
+    function a(){}
+    a = 2;
+    a  =3;
+}
+console.log(a) // a = 3;
+</code></pre>
+<p>但是会发现，变量a的值发生了变化。<br>
+其实是因为函数声明会有<strong>副作用</strong><br>
+声明的确会提升，但是在原本的位置上，仍然会对程序有一定的英雄。<br>
+也就是程序在执行到原本的位置时候，会将块级作用域中的同名局部变量，同步到全局中的同名全局变量。<br>
+在同一层块级作用域，会发生多次同步。而在嵌套if作用域中，只会发生第一次同步。</p>
+<pre><code class="language-js">var a = 1;
+if(true){
+    a = 2;
+    function a(){}
+    if(true){
+        a = 3;
+        function a(){var b ;}
+    }
 }
 
-const foo = (bar = mandatory())=&gt;{
-    return bar;
-}
+console.log(a) // a = 2;
 </code></pre>
-</li>
-<li>
-<p>惰性载入函数</p>
-<p>通过覆写函数，使得下一次不用再进行判断</p>
-<pre><code class="language-js">function foo(){
-    if(a != b){
-        console.log('a')
-    }else{
-        console.log('b')
-    }
-}
-//优化后
-function foo(){
-    if(a != b){
-        foo = function(){
-            console.log('a')
-        }
-    }else{
-        foo = function(){
-            console.log('b')
-        }
-    }
-    foo();	// or return foo()
-}
-</code></pre>
-</li>
-<li>
-<p>一次性函数</p>
-<pre><code class="language-js">let foo = ()=&gt;{
-    console.log('1')
-    foo = ()=&gt;{
-        console.log('2')
-    }
-}
-</code></pre>
-</li>
-<li>
-<p>按位取反巧用</p>
-<pre><code class="language-js">~ 0  === -1  //true
-~-1 ===   0 //true
-
-const arr = [1,2,3];
-~arr.indexOf(4) ? null :arr.push(4) ;
-</code></pre>
-</li>
-</ol>
 
               </div>
               <div class="toc-container">
@@ -184,6 +139,15 @@ const arr = [1,2,3];
           </article>
         </div>
 
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://c739557637.github.io/post/shi-xian-yi-ge-jian-dan-de-history-mo-shi-de-lu-you/">
+              <h3 class="post-title">
+                History模式的路由
+              </h3>
+            </a>
+          </div>
         
 
         
