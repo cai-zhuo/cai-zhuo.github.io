@@ -310,7 +310,7 @@ body {
   letter-spacing: 0.05em;
 }
 a {
-  color: rgba(0, 0, 0, 0.98);
+  color: #393649;
   text-decoration: none;
   transition: all 0.3s;
 }
@@ -352,6 +352,8 @@ td {
   flex: 1;
   padding: 40px 0;
   text-align: center;
+  background-color: #393649;
+  color: #E3EAFA;
 }
 .site-header .site-title {
   font-size: 28px;
@@ -362,6 +364,7 @@ td {
   padding: 24px;
   color: #495057;
   font-weight: lighter;
+  color: #8C98BA;
 }
 .site-header .menu-container {
   display: flex;
@@ -374,6 +377,7 @@ td {
   padding: 8px 16px;
   flex-shrink: 0;
   font-weight: 600;
+  color: #E3EAFA;
 }
 .site-header .avatar {
   margin-bottom: 24px;
@@ -509,7 +513,7 @@ td {
   }
 }
 .post-detail {
-  flex: 1;
+  flex: 3;
 }
 .post-detail .post {
   padding: 24px 32px;
@@ -816,6 +820,9 @@ td {
   background: #fafafa;
 }
 @media (max-width: 600px) {
+  .post-detail {
+    flex: 3;
+  }
   .post-detail .post {
     padding: 16px;
   }
