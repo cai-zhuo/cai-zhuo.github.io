@@ -513,7 +513,9 @@ td {
   }
 }
 .post-detail {
-  flex: 3;
+  flex: 4;
+  max-height: 100vh;
+  overflow-y: scroll;
 }
 .post-detail .post {
   padding: 24px 32px;
@@ -821,7 +823,7 @@ td {
 }
 @media (max-width: 600px) {
   .post-detail {
-    flex: 3;
+    flex: 4;
   }
   .post-detail .post {
     padding: 16px;
@@ -838,7 +840,7 @@ td {
 }
 .archives-container {
   padding: 32px;
-  flex: 1;
+  flex: 4;
 }
 .archives-container .year {
   font-size: 1.375rem;
@@ -868,7 +870,7 @@ td {
 }
 .tags-container {
   padding: 32px 32px;
-  flex: 1;
+  flex: 4;
   text-align: center;
 }
 .tags-container .tag {
