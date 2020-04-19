@@ -315,7 +315,7 @@ a {
   transition: all 0.3s;
 }
 a:hover {
-  color: #006CFF;
+  color: #B6A7A3;
 }
 body,
 div,
@@ -347,6 +347,18 @@ td {
   display: flex;
   min-height: 100vh;
   flex-direction: row;
+}
+@media (max-width: 600px) {
+  .main .main-content {
+    flex-direction: column;
+  }
+  .main .main-content .site-header .menu-container {
+    flex-direction: row;
+  }
+  .main .main-content .site-header .site-footer {
+    position: initial;
+    padding: 0;
+  }
 }
 .site-header {
   flex: 1;
@@ -394,6 +406,7 @@ td {
   color: #868e96;
 }
 @media (max-width: 600px) {
+  width: 0;
   .site-header {
     padding: 24px 0 0;
   }
@@ -498,6 +511,9 @@ td {
   border-bottom: 2px solid;
 }
 @media (max-width: 600px) {
+  .post-container {
+    overflow-y: initial;
+  }
   .post-container .post {
     padding: 16px 16px;
   }
