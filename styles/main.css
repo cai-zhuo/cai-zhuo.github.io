@@ -840,6 +840,7 @@ td {
 @media (max-width: 600px) {
   .post-detail {
     flex: 4;
+    overflow-y: initial;
   }
   .post-detail .post {
     padding: 16px;
@@ -881,6 +882,7 @@ td {
 }
 @media (max-width: 600px) {
   .archives-container {
+    overflow-y: initial;
     padding: 16px;
   }
 }
