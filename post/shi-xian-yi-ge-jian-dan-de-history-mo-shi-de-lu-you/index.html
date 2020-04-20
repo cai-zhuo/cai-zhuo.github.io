@@ -1,14 +1,4 @@
-<html><head><meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>
-    History模式的路由 | CaiZhuo
-</title>
-<link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1587367631995">
-<!--<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">-->
-<link rel="stylesheet" href="https://c739557637.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="History模式的路由 | CaiZhuo - Atom Feed" href="https://c739557637.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
-<meta name="description" content="用一个类来实现简单的页面history模式路由。
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>History模式的路由 | CaiZhuo</title><link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1587367631995"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://c739557637.github.io/styles/main.css"><link rel="alternate" type="application/atom+xml" title="History模式的路由 | CaiZhuo - Atom Feed" href="https://c739557637.github.io/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="用一个类来实现简单的页面history模式路由。
 
 
 实现一个类
@@ -177,9 +167,7 @@ const router = (()=&gt;{
 </ol>
 </div><div class="toc-container"></div></div></article><div class="next-post"><div class="next">下一篇</div><a href="https://c739557637.github.io/post/http-ru-men/"><h3 class="post-title">HTTP入门</h3></a></div></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://c739557637.github.io/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
         hljs.initHighlightingOnLoad()
-
         let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
-
         // This should probably be throttled.
         // Especially because it triggers during smooth scrolling.
         // https://lodash.com/docs/4.17.10#throttle
@@ -188,10 +176,8 @@ const router = (()=&gt;{
         //    _.throttle(doThatStuff, 100);
         // });
         // Only not doing it here to keep this Pen dependency-free.
-
         window.addEventListener("scroll", event => {
             let fromTop = window.scrollY;
-
             mainNavLinks.forEach((link, index) => {
                 let section = document.getElementById(decodeURI(link.hash).substring(1));
                 let nextSection = null

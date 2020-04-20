@@ -1,14 +1,4 @@
-<html><head><meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>
-    Javascript 技巧收集 | CaiZhuo
-</title>
-<link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1587367631995">
-<!--<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">-->
-<link rel="stylesheet" href="https://c739557637.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="Javascript 技巧收集 | CaiZhuo - Atom Feed" href="https://c739557637.github.io/atom.xml">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
-<meta name="description" content="
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>Javascript 技巧收集 | CaiZhuo</title><link rel="shortcut icon" href="https://c739557637.github.io/favicon.ico?v=1587367631995"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://c739557637.github.io/styles/main.css"><link rel="alternate" type="application/atom+xml" title="Javascript 技巧收集 | CaiZhuo - Atom Feed" href="https://c739557637.github.io/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="
 
 js通过valueOf获取引用类型的数字，toString获取引用类型的字符串
 
@@ -97,9 +87,7 @@ const arr = [1,2,3];
 </ol>
 </div><div class="toc-container"></div></div></article></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://c739557637.github.io/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
         hljs.initHighlightingOnLoad()
-
         let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
-
         // This should probably be throttled.
         // Especially because it triggers during smooth scrolling.
         // https://lodash.com/docs/4.17.10#throttle
@@ -108,10 +96,8 @@ const arr = [1,2,3];
         //    _.throttle(doThatStuff, 100);
         // });
         // Only not doing it here to keep this Pen dependency-free.
-
         window.addEventListener("scroll", event => {
             let fromTop = window.scrollY;
-
             mainNavLinks.forEach((link, index) => {
                 let section = document.getElementById(decodeURI(link.hash).substring(1));
                 let nextSection = null
