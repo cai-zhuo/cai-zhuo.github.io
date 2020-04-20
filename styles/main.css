@@ -874,8 +874,6 @@ td {
   padding: 24px 32px;
 }
 .site-footer {
-  position: absolute;
-  bottom: 0;
   font-size: 12px;
   text-align: center;
   padding: 40px 24px;
@@ -884,10 +882,14 @@ td {
   justify-content: center;
   align-items: center;
 }
+.site-footer a {
+  color: #fab;
+  margin-left: 14px;
+}
 .rss {
   display: inline-flex;
   align-items: center;
-  margin-left: 24px;
+  /*margin-left: 24px;*/
 }
 .hljs {
   display: block;
