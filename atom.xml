@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://c739557637.github.io</id>
-    <title>CaiZhuo</title>
-    <updated>2020-04-20T07:46:08.712Z</updated>
+    <title>Cai&apos;s Bolg</title>
+    <updated>2020-04-20T07:58:57.683Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://c739557637.github.io"/>
     <link rel="self" href="https://c739557637.github.io/atom.xml"/>
-    <subtitle>看着自己</subtitle>
+    <subtitle>watching myself</subtitle>
     <logo>https://c739557637.github.io/images/avatar.png</logo>
     <icon>https://c739557637.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, CaiZhuo</rights>
+    <rights>All rights reserved 2020, Cai&apos;s Bolg</rights>
     <entry>
         <title type="html"><![CDATA[if块级作用域函数声明的副作用]]></title>
         <id>https://c739557637.github.io/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/</id>

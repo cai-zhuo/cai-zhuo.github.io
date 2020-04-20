@@ -331,10 +331,10 @@ td {
 }
 .site-header .site-description {
   font-size: 12px;
-  padding: 24px;
-  color: #495057;
+  padding: 20px;
+  /*color: @oc-gray-7*/
   font-weight: lighter;
-  color: #8C98BA;
+  color: #abb;
 }
 .site-header .menu-container {
   display: flex;
@@ -361,7 +361,7 @@ td {
 }
 .site-header .social-container a {
   margin: 4px 8px;
-  color: #868e96;
+  color: #faa;
 }
 @media (max-width: 600px) {
   width: 0;
