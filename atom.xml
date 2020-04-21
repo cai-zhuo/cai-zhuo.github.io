@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://c739557637.github.io</id>
     <title>Cai&apos;s Bolg</title>
-    <updated>2020-04-20T10:49:27.343Z</updated>
+    <updated>2020-04-21T03:24:27.928Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://c739557637.github.io"/>
     <link rel="self" href="https://c739557637.github.io/atom.xml"/>
@@ -10,6 +10,155 @@
     <logo>https://c739557637.github.io/images/avatar.png</logo>
     <icon>https://c739557637.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, Cai&apos;s Bolg</rights>
+    <entry>
+        <title type="html"><![CDATA[观察浏览器回调触发机制]]></title>
+        <id>https://c739557637.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/</id>
+        <link href="https://c739557637.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/">
+        </link>
+        <updated>2020-04-21T02:11:42.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="观察回调执行位置">观察回调执行位置</h2>
+<p>我们先定义一些要使用的函数,用来观察observer()回调位置。</p>
+<pre><code class="language-js">const observer = new MutationObserver(observe_callback);
+let counter = 1;
+const textNode = document.createTextNode(String(counter));
+
+observer.observe(textNode, {
+	characterData: true
+});
+
+function nextTick() {
+        Promise.resolve().then(() =&gt; console.log('promise resolved'));
+        timerFunc();
+        setTimeout(() =&gt; console.log('timeout'));
+    }
+
+function changeNode() {
+        counter = (counter + 1) % 2;
+        textNode.data = String(counter);
+}
+
+function observe_callback() {
+        console.log('observer alert');
+}
+</code></pre>
+<p>我们猜测一下几种可能</p>
+<ul>
+<li>MO回调属于宏队列，在事件轮询中触发。</li>
+<li>MO回调属于微队列，在事件轮询前触发。</li>
+</ul>
+<p>执行函数</p>
+<pre><code class="language-js">nextTick();
+</code></pre>
+<p>执行结果</p>
+<blockquote>
+<p>promise resolved<br>
+observer alert<br>
+timeout</p>
+</blockquote>
+<p>通过调换 <strong>promise.resolve().then() <strong>和</strong>timerFunc</strong>  顺序</p>
+<blockquote>
+<p>observer alert<br>
+promise resolved<br>
+timeout</p>
+</blockquote>
+<p>发现 <strong>MO回调</strong> 和 <strong>promise回调</strong> 在微队列中执行顺序取决于注册顺序。</p>
+<h2 id="将requestanimationframe回调加入观察顺序">将requestAnimationFrame回调加入观察顺序</h2>
+<p>声明函数</p>
+<pre><code class="language-js">function RAF_callback() {
+	console.log('requestAnimationFrame callback');
+}
+</code></pre>
+<p>修改函数</p>
+<pre><code class="language-js">function nextTick() {
+	requestAnimationFrame(RAF_callback) 	//推进RFA回调到下一帧的队列
+    Promise.resolve().then(() =&gt; console.log('promise resolved')); //推进promise回调到下一帧队列
+	changeNode();	//推进MO回调到下一帧队列
+	setTimeout(() =&gt; console.log('timeout'));  //推进timeout回调到队列
+}
+</code></pre>
+<p>函数执行</p>
+<pre><code class="language-js">nextTick();
+</code></pre>
+<p>执行多次的结果</p>
+<blockquote>
+<p>promise resolved<br>
+observer alert<br>
+timeout<br>
+requestAnimationFrame callback</p>
+</blockquote>
+<blockquote>
+<p>promise resolved<br>
+observer alert<br>
+requestAnimationFrame callback	// -&gt;<br>
+timeout												// -&gt;顺序发生了变化</p>
+</blockquote>
+<p>通过上面结果我们可以推测出</p>
+<ul>
+<li><strong>requestAnimationFrame回调</strong>属于宏队列事件，也就是该方法处于事件轮询中</li>
+<li>而<strong>setTimeout回调</strong>和**requestAnimationFrame回调****具体谁先触发取决于，事件轮询到那个阶段。</li>
+</ul>
+<h2 id="分析">分析</h2>
+<p>我们先分析一下，浏览器渲染每一帧都发生了什么。</p>
+<figure data-type="image" tabindex="1"><img src="C:%5CUsers%5Czhuo%5CDesktop%5C1158202-6c6f3bf9f9b2c5eb.webp" alt="" loading="lazy"></figure>
+<blockquote>
+<ul>
+<li>
+<p>JavaScript : js代码的执行和计算</p>
+</li>
+<li>
+<p>Style : 确定每个DOM元素所应用的css规则</p>
+</li>
+<li>
+<p>Layout : 计算每个DOM元素在最终屏幕上显示的大小和位置。由于web页面的元素布局是相对的，所以其中任意	一个元素的位置发生变化，都会联动的引起其他元素发生变化，这个过程叫reflow(回流)。</p>
+</li>
+<li>
+<p>Paint : 在多个层上绘制DOM元素的的文字、颜色、图像、边框和阴影等。</p>
+</li>
+<li>
+<p>Composite : 按照合理的顺序合并图层然后显示到屏幕上</p>
+<p>该部分来自 https://www.jianshu.com/p/a32b890c29b1 作者:齐修</p>
+</li>
+</ul>
+</blockquote>
+<p>而 JavaScript 部分主要部分就是事件循环和微队列机制。</p>
+<p>所以我们可以继续分析，以上函数回调的出发顺序。</p>
+<p>当我们注册一个MO回调，promise回调，RFA回调，setTimeout回调，实在当前 JavaScript阶段注册。</p>
+<p>而在下一帧在执行JavaScript阶段时，按照微队列和事件轮询机制触发回调。</p>
+<blockquote>
+<p>浏览器和node之间的事件轮询机制略有差异。</p>
+<p>并且node版本不同也会有差异。在12.0以后基本和浏览器相同。</p>
+<p>简单来说浏览器中的微队列在每个事件阶段<strong>之中</strong>，并且清空微队列在清空宏队列。</p>
+<p>而12.0以前的node的微队列在每个事件<strong>之间</strong>，并且process.nextTick回调 优于 promise回调。</p>
+</blockquote>
+<pre><code class="language-js">   ┌───────────────────────────┐
+┌─&gt;│           timers          │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │     pending callbacks     │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+│  │       idle, prepare       │
+│  └─────────────┬─────────────┘      ┌───────────────┐
+│  ┌─────────────┴─────────────┐      │   incoming:   │
+│  │           poll            │&lt;─────┤  connections, │
+│  └─────────────┬─────────────┘      │   data, etc.  │
+│  ┌─────────────┴─────────────┐      └───────────────┘
+│  │           check           │
+│  └─────────────┬─────────────┘
+│  ┌─────────────┴─────────────┐
+└──┤      close callbacks      │
+   └───────────────────────────┘
+   //该图表来自node文档
+</code></pre>
+<p>我们再来看之前注册的回调都发生了什么</p>
+<p>JavaScript 阶段 注册了MO回调，RFA回调，setTimeout回调，promise回调。</p>
+<p>然后在下一帧执行JavaScript阶段，触发事件轮询机制。按机制触发注册的回调。</p>
+<ul>
+<li>先清空微队列，执行了promise回调和MO回调</li>
+<li>再看当前处于哪个事件阶段，清空宏队列。</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[if块级作用域函数声明的副作用]]></title>
         <id>https://c739557637.github.io/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/</id>
