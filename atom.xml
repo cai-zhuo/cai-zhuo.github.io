@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://c739557637.github.io</id>
     <title>CZh.IM</title>
-    <updated>2020-04-22T06:33:19.104Z</updated>
+    <updated>2020-04-22T14:25:13.171Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://c739557637.github.io"/>
     <link rel="self" href="https://c739557637.github.io/atom.xml"/>
@@ -101,10 +101,11 @@ timeout												// -&gt;顺序发生了变化</p>
 <h2 id="分析">分析</h2>
 <p>我们先分析一下，浏览器渲染每一帧都发生了什么。</p>
 <figure data-type="image" tabindex="1"><img src="C:%5CUsers%5Czhuo%5CDesktop%5C1158202-6c6f3bf9f9b2c5eb.webp" alt="" loading="lazy"></figure>
+<p><strong>JavaScript</strong> -&gt; <strong>Style</strong> -&gt; <strong>Layout</strong> -&gt; <strong>Paint</strong> -&gt; <strong>Composite</strong></p>
 <blockquote>
 <ul>
 <li>
-<p>JavaScript : js代码的执行和计算</p>
+<p>JavaScript : js代码的执行和计算(包括事件循环机制)</p>
 </li>
 <li>
 <p>Style : 确定每个DOM元素所应用的css规则</p>
@@ -117,7 +118,7 @@ timeout												// -&gt;顺序发生了变化</p>
 </li>
 <li>
 <p>Composite : 按照合理的顺序合并图层然后显示到屏幕上</p>
-<p>该部分来自 https://www.jianshu.com/p/a32b890c29b1 作者:齐修</p>
+<p>该部分来自 https://www.jianshu.com/p/a32b890c29b1</p>
 </li>
 </ul>
 </blockquote>
@@ -149,7 +150,7 @@ timeout												// -&gt;顺序发生了变化</p>
 │  ┌─────────────┴─────────────┐
 └──┤      close callbacks      │
    └───────────────────────────┘
-   //该图表来自node文档
+   //该图表来自node官方文档
 </code></pre>
 <p>我们再来看之前注册的回调都发生了什么</p>
 <p>JavaScript 阶段 注册了MO回调，RFA回调，setTimeout回调，promise回调。</p>
