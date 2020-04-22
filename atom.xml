@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://c739557637.github.io</id>
-    <title>Cai&apos;s Bolg</title>
-    <updated>2020-04-21T05:37:11.911Z</updated>
+    <title>CaiZho</title>
+    <updated>2020-04-22T03:24:59.764Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://c739557637.github.io"/>
     <link rel="self" href="https://c739557637.github.io/atom.xml"/>
     <subtitle>watching myself</subtitle>
     <logo>https://c739557637.github.io/images/avatar.png</logo>
     <icon>https://c739557637.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Cai&apos;s Bolg</rights>
+    <rights>All rights reserved 2020, CaiZho</rights>
     <entry>
         <title type="html"><![CDATA[观察浏览器回调触发机制]]></title>
         <id>https://c739557637.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/</id>
