@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://c739557637.github.io</id>
-    <title>CZh.IM</title>
-    <updated>2020-04-22T15:00:53.614Z</updated>
+    <id>https://cai-zhuo.github.io</id>
+    <title>Gridea</title>
+    <updated>2020-05-07T16:06:11.760Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://c739557637.github.io"/>
-    <link rel="self" href="https://c739557637.github.io/atom.xml"/>
-    <subtitle>watching myself</subtitle>
-    <logo>https://c739557637.github.io/images/avatar.png</logo>
-    <icon>https://c739557637.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, CZh.IM</rights>
+    <link rel="alternate" href="https://cai-zhuo.github.io"/>
+    <link rel="self" href="https://cai-zhuo.github.io/atom.xml"/>
+    <subtitle>温故而知新</subtitle>
+    <logo>https://cai-zhuo.github.io/images/avatar.png</logo>
+    <icon>https://cai-zhuo.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2020, Gridea</rights>
     <entry>
         <title type="html"><![CDATA[观察浏览器回调触发机制]]></title>
-        <id>https://c739557637.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/</id>
-        <link href="https://c739557637.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/">
+        <id>https://cai-zhuo.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/</id>
+        <link href="https://cai-zhuo.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/">
         </link>
         <updated>2020-04-21T02:11:42.000Z</updated>
         <content type="html"><![CDATA[<p>这篇文章中，我们首先会通过一些API机制，观察回调执行的时机，在进行具体的分析。</p>
@@ -163,8 +163,8 @@ timeout												// -&gt;顺序发生了变化</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[if块级作用域函数声明的副作用]]></title>
-        <id>https://c739557637.github.io/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/</id>
-        <link href="https://c739557637.github.io/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/">
+        <id>https://cai-zhuo.github.io/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/</id>
+        <link href="https://cai-zhuo.github.io/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/">
         </link>
         <updated>2020-04-15T07:04:40.000Z</updated>
         <content type="html"><![CDATA[<p>在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。<br>
@@ -191,8 +191,8 @@ function a(){var b ;}<br>
     </entry>
     <entry>
         <title type="html"><![CDATA[History模式的路由]]></title>
-        <id>https://c739557637.github.io/post/shi-xian-yi-ge-jian-dan-de-history-mo-shi-de-lu-you/</id>
-        <link href="https://c739557637.github.io/post/shi-xian-yi-ge-jian-dan-de-history-mo-shi-de-lu-you/">
+        <id>https://cai-zhuo.github.io/post/shi-xian-yi-ge-jian-dan-de-history-mo-shi-de-lu-you/</id>
+        <link href="https://cai-zhuo.github.io/post/shi-xian-yi-ge-jian-dan-de-history-mo-shi-de-lu-you/">
         </link>
         <updated>2020-04-06T04:25:50.000Z</updated>
         <content type="html"><![CDATA[<p>用一个类来实现简单的页面history模式路由。</p>
@@ -357,8 +357,8 @@ const router = (()=&gt;{
     </entry>
     <entry>
         <title type="html"><![CDATA[HTTP入门]]></title>
-        <id>https://c739557637.github.io/post/http-ru-men/</id>
-        <link href="https://c739557637.github.io/post/http-ru-men/">
+        <id>https://cai-zhuo.github.io/post/http-ru-men/</id>
+        <link href="https://cai-zhuo.github.io/post/http-ru-men/">
         </link>
         <updated>2020-04-04T04:47:53.000Z</updated>
         <content type="html"><![CDATA[<h2 id="http-基本知识">HTTP 基本知识</h2>
@@ -555,8 +555,8 @@ const router = (()=&gt;{
     </entry>
     <entry>
         <title type="html"><![CDATA[EVENT LOOP]]></title>
-        <id>https://c739557637.github.io/post/event-loop/</id>
-        <link href="https://c739557637.github.io/post/event-loop/">
+        <id>https://cai-zhuo.github.io/post/event-loop/</id>
+        <link href="https://cai-zhuo.github.io/post/event-loop/">
         </link>
         <updated>2020-04-04T03:21:39.000Z</updated>
         <content type="html"><![CDATA[<h2 id="在javascript运行机制中依赖event-loop决定代码先后执行的顺序">在JavaScript运行机制中，依赖EVENT LOOP，决定代码先后执行的顺序。</h2>
@@ -639,8 +639,8 @@ const router = (()=&gt;{
     </entry>
     <entry>
         <title type="html"><![CDATA[Javascript 技巧收集]]></title>
-        <id>https://c739557637.github.io/post/javascript-ji-qiao-shou-ji/</id>
-        <link href="https://c739557637.github.io/post/javascript-ji-qiao-shou-ji/">
+        <id>https://cai-zhuo.github.io/post/javascript-ji-qiao-shou-ji/</id>
+        <link href="https://cai-zhuo.github.io/post/javascript-ji-qiao-shou-ji/">
         </link>
         <updated>2020-04-04T03:07:11.000Z</updated>
         <content type="html"><![CDATA[<ol>
