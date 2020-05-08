@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://cai-zhuo.github.io</id>
-    <title>Gridea</title>
-    <updated>2020-05-07T16:06:11.760Z</updated>
+    <title>CZh.IM</title>
+    <updated>2020-05-08T13:29:02.538Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://cai-zhuo.github.io"/>
     <link rel="self" href="https://cai-zhuo.github.io/atom.xml"/>
-    <subtitle>温故而知新</subtitle>
+    <subtitle>watching myself</subtitle>
     <logo>https://cai-zhuo.github.io/images/avatar.png</logo>
     <icon>https://cai-zhuo.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, Gridea</rights>
+    <rights>All rights reserved 2020, CZh.IM</rights>
     <entry>
         <title type="html"><![CDATA[观察浏览器回调触发机制]]></title>
         <id>https://cai-zhuo.github.io/post/guan-cha-liu-lan-qi-hui-diao-hong-fa-ji-zhi/</id>
