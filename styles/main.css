@@ -495,7 +495,7 @@ td {
   overflow-y: scroll;
 }
 .post-detail .post {
-  padding: 24px 32px;
+  padding: 24px 150px;
 }
 .post-detail .post .post-feature-image {
   width: 100%;
@@ -519,7 +519,7 @@ td {
   color: #5E5E5E;
 }
 .post-detail .post .post-info > span:not(:first-child):before {
-  content: "/ ";
+  content: '/ ';
   font-size: 10px;
   color: rgba(0, 0, 0, 0.1);
   margin: 0 4px;
@@ -533,7 +533,7 @@ td {
 .post-detail .post .post-content {
   width: 100%;
   flex-shrink: 0;
-  font-family: "Droid Serif", "PingFang SC", "Hiragino Sans GB", "Droid Sans Fallback", "Microsoft YaHei", sans-serif;
+  font-family: 'Droid Serif', 'PingFang SC', 'Hiragino Sans GB', 'Droid Sans Fallback', 'Microsoft YaHei', sans-serif;
 }
 .post-detail .post .post-content a {
   color: rgba(0, 0, 0, 0.98);
@@ -593,7 +593,7 @@ td {
   position: absolute;
   top: -4px;
   left: 0;
-  content: "\201c";
+  content: '\201c';
   font: 700 62px/1 serif;
   color: rgba(0, 0, 0, 0.1);
 }
@@ -658,7 +658,7 @@ td {
   color: rgba(0, 0, 0, 0.2);
   font-size: 1.1em;
   display: block;
-  content: "* * *";
+  content: '* * *';
   text-align: center;
 }
 .post-detail .post .post-content mark {
@@ -674,7 +674,7 @@ td {
   padding-right: 18px;
 }
 .post-detail .post .post-content .footnotes:before {
-  content: "";
+  content: '';
   display: block;
   border-top: 4px solid rgba(0, 0, 0, 0.1);
   width: 50%;
@@ -715,7 +715,7 @@ td {
   text-decoration: line-through;
 }
 .post-detail .post .post-content .task-list-item-checkbox:before {
-  content: "";
+  content: '';
   width: 16px;
   height: 16px;
   box-sizing: border-box;
@@ -729,7 +729,7 @@ td {
   transition: all 0.2s ease;
 }
 .post-detail .post .post-content .task-list-item-checkbox:after {
-  content: "";
+  content: '';
   transform: rotate(-45deg) scale(0);
   width: 9px;
   height: 5px;
@@ -770,7 +770,7 @@ td {
   padding: 16px 8px;
 }
 .toc-container .markdownIt-TOC:before {
-  content: "";
+  content: '';
   position: absolute;
   top: 0;
   left: 8px;
@@ -804,7 +804,7 @@ td {
     overflow-y: initial;
   }
   .post-detail .post {
-    padding: 16px;
+    padding: 20px;
   }
   .post-detail .post .post-title {
     font-size: 24px;
