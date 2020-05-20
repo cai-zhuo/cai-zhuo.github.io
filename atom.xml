@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://cai-zhuo.github.io</id>
     <title>CZh.IM</title>
-    <updated>2020-05-20T03:11:31.393Z</updated>
+    <updated>2020-05-20T03:15:38.312Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://cai-zhuo.github.io"/>
     <link rel="self" href="https://cai-zhuo.github.io/atom.xml"/>
@@ -38,41 +38,6 @@
 就会告诉合成器，这个地方可以先进行 分层，光栅化，合成，等一些列操作，等到事件出发的时候发送到GPU。而不用等待主线程执行完毕。</p>
 <pre><code class="language-js">document.addEventListener('click',()=&gt;{},{passive:true});
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[第一次实习加班]]></title>
-        <id>https://cai-zhuo.github.io/post/di-yi-ci-shi-xi-jia-ban/</id>
-        <link href="https://cai-zhuo.github.io/post/di-yi-ci-shi-xi-jia-ban/">
-        </link>
-        <updated>2020-05-10T13:59:24.000Z</updated>
-        <content type="html"><![CDATA[<p>2020年五月十号，十点整。<br>
-心里充斥着孤单，时刻感受到没有安全感而带来的落寞和紧张。</p>
-<p>其实我每次听到楼梯声，钥匙开锁声音，都会非常敏感。<br>
-不自觉而来的不安和恐惧，从小时候一直半岁到现在。<br>
-而我知道原因。</p>
-<p>今天加班，后面的同事在教育孩子。<br>
-因为孩子的作业完成情况并不好，所以让大人很是头疼，时不时以语言刺激，以求让孩子“醒悟”<br>
-我其实并不清楚，这种严厉对一个孩子来说，是否合适。<br>
-也不清楚，孩子是否应该轻松快乐，追求自然赋予自己的天性。<br>
-但是现在情况看来，一个孩子从小就要做各种各样的训练。“音乐”，“英语”，“学习能力”，“思维方式”等，各种各样，想来以后会受用无穷的能力。<br>
-精英家庭对孩子的训练，为了能让自己的家庭保持在社会占据的资源。<br>
-底层家庭对孩子的训练，为了能让自己的家庭免于为了生存而做出牺牲。</p>
-<p>而我从小生活的环境，是一个，既不幸福，也不令人悲伤的家庭。<br>
-对于一个小地方的家庭来说，不需要为了生活而忙碌奔波，但也没有令人羡艳的物质享受。<br>
-而我的感受是，扭曲，这样的扭曲，时常让我在长大以后喘不过气，时常让我缺少对人应该有亲近。<br>
-在我今天看到同事教育孩子的那一幕时，我对比的是自己的父母。<br>
-我不记得从什么时候起，父母对我不再进行言传身教，有意识的教育。<br>
-几乎每天只有冷战，冷漠的气氛。<br>
-每次听到父母上楼的声音，钥匙开锁的声音，都会从心里预示着下一次的爆发。<br>
-我学到的只是，关系破裂时的冷漠，不自觉的让别人承担自己的负面情绪。<br>
-还有很多我不知道的，隐在的性格缺陷。</p>
-<p>我也很感谢我的父母，在我高三的时候，能为了重归于好一段时间，让我的心情可以专心于学习。<br>
-也感谢他们供我成人，来了上海这个地方，明白了生活的不易。<br>
-对过去十几年，有恨也有怀念。有不解也有平常心。<br>
-对我来说实在复杂，却又没有太多情绪。<br>
-也许是看向前方和脚下，让我慢慢释怀了过去。</p>
-<p>那就看向前方，归去，也无风雨也无晴。</p>
 ]]></content>
     </entry>
     <entry>
