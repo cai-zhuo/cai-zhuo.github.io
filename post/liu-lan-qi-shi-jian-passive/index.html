@@ -1,0 +1,76 @@
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>浏览器事件-passive | CZh.IM</title><link rel="shortcut icon" href="https://cai-zhuo.github.io/favicon.ico?v=1589943213088"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://cai-zhuo.github.io/styles/main.css"><link rel="alternate" type="application/atom+xml" title="浏览器事件-passive | CZh.IM - Atom Feed" href="https://cai-zhuo.github.io/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="浏览器事件-passive
+target.addEventListner('type',callback,options)
+options
+
+capture : 是否在事件的捕获阶段出发
+once ： 最多只调用一次
+passive ： 设..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://cai-zhuo.github.io"><img class="avatar" src="https://cai-zhuo.github.io/images/avatar.png?v=1589943213088" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://cai-zhuo.github.io/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">浏览器事件-passive</h2><div class="post-info"><span>2020-05-18</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h1 id="浏览器事件-passive">浏览器事件-passive</h1>
+<h2 id="targetaddeventlistnertypecallbackoptions">target.addEventListner('type',callback,options)</h2>
+<h3 id="options">options</h3>
+<ul>
+<li>capture : 是否在事件的捕获阶段出发</li>
+<li>once ： 最多只调用一次</li>
+<li>passive ： 设置为true时，表示Listener永远不会调用preventDefault。如果listener仍调用，浏览器会在控制台发出一个警告。（MDN）</li>
+</ul>
+<h3 id="preventdefault">preventDefault</h3>
+<blockquote>
+<p>如果此事件没有被显式处理，它默认的动作也不应该照常执行。此事件还是继续传播，除非碰到事件侦听器调用stopPropagation() 或stopImmediatePropagation()，才停止传播。        ---MDN</p>
+</blockquote>
+<h3 id="render-process">render process</h3>
+<p>在MDN文档中，对于passive和preventDefault只有简单的介绍，也就是简单的说明，preventDefault会组织默认事件，而passive表明我不会阻止默认事件。<br>
+而在render process Compositing阶段，为了加速渲染，采用的是合成器渲染。也就是将一个页面分成多个图层，分别光栅化（渲染）。然后绘制成一个帧。<br>
+假如在页面中，进行滚动，合成器就会预先将没有显示的部分，分层，光栅化，合成，发送到GPU，有GPU负责显示。<br>
+如果我又在document元素上监听了scroll事件，此时，合成器就会先等待主线程执行JS，然后再进行上述操作，这样无疑会拖慢整个过程的平滑程度，甚至会出现掉帧。<br>
+对合成器来说，监听事件的Dom对象所属的区域，称为 <strong>非快速滚动区域</strong> ，也就是执行慢的区域。<br>
+而在监听事件中配置 passive : true.<br>
+就会告诉合成器，这个地方可以先进行 分层，光栅化，合成，等一些列操作，等到事件出发的时候发送到GPU。而不用等待主线程执行完毕。</p>
+<pre><code class="language-js">document.addEventListener('click',()=&gt;{},{passive:true});
+</code></pre>
+</div><div class="toc-container"><ul class="markdownIt-TOC">
+<li><a href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E4%BA%8B%E4%BB%B6-passive">浏览器事件-passive</a>
+<ul>
+<li><a href="#targetaddeventlistnertypecallbackoptions">target.addEventListner('type',callback,options)</a>
+<ul>
+<li><a href="#options">options</a></li>
+<li><a href="#preventdefault">preventDefault</a></li>
+<li><a href="#render-process">render process</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div></div></article><div class="next-post"><div class="next">下一篇</div><a href="https://cai-zhuo.github.io/post/di-yi-ci-shi-xi-jia-ban/"><h3 class="post-title">第一次实习加班</h3></a></div></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://cai-zhuo.github.io/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
+        hljs.initHighlightingOnLoad()
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+        // This should probably be throttled.
+        // Especially because it triggers during smooth scrolling.
+        // https://lodash.com/docs/4.17.10#throttle
+        // You could do like...
+        // window.addEventListener("scroll", () => {
+        //    _.throttle(doThatStuff, 100);
+        // });
+        // Only not doing it here to keep this Pen dependency-free.
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+    </script></body></html>
