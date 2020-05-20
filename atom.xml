@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-05-20T05:33:02.102Z</updated>
+    <updated>2020-05-20T10:53:03.263Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -26,9 +26,8 @@
 <li>async     异步下载，下载完毕立即执行JS文件</li>
 </ul>
 <p>当浏览器启动渲染时，会走一个如下的机制。</p>
-<p>​																		DOM Tree</p>
-<p>JS(AST,JIT)--&gt; 宏脚本执行 --&gt; Event Loop --&gt; 	+	--&gt;  Render Tree --&gt;  Layout --&gt;  Paint --&gt; Compositing</p>
-<p>​																		CSS Rule Tree</p>
+<p>​</p>
+<p>JS(AST,JIT)--&gt; 宏脚本执行 --&gt; Event Loop --&gt; 	DOM + CSS Rule 	--&gt;  Render Tree --&gt;  Layout --&gt;  Paint --&gt; Compositing</p>
 <ul>
 <li>Render Tree	由Dom和CSS计算出的dom节点应具有的样式树</li>
 <li>Layout      计算Dom节点的布局</li>
