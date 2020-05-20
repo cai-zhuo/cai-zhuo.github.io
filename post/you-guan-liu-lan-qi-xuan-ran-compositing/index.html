@@ -1,0 +1,108 @@
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>有关浏览器渲染（Compositing） | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1589952756390"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="有关浏览器渲染（Compositing） | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="浏览器渲染的过程
+当浏览器拿到HTTP响应的HTML文件时，会去解析HTML的DOM结构。生成DOM Tree
+对于解析到的link 标签，会进行并行下载，下载完成后解析，style标签会直接解析，link,style标签中的样式资源会生成..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1589952756390" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">有关浏览器渲染（Compositing）</h2><div class="post-info"><span>2020-05-20</span><span>3 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="浏览器渲染的过程">浏览器渲染的过程</h2>
+<p>当浏览器拿到HTTP响应的HTML文件时，会去解析HTML的DOM结构。生成DOM Tree</p>
+<p>对于解析到的link 标签，会进行并行下载，下载完成后解析，style标签会直接解析，link,style标签中的样式资源会生成 CSS Rule Tree。</p>
+<p>而script标签分为三种情况。</p>
+<ul>
+<li>default	同步下载，暂停解析DOM结构</li>
+<li>defer	异步下载，DOM解析完毕以后，执行JS文件</li>
+<li>async     异步下载，下载完毕立即执行JS文件</li>
+</ul>
+<p>当浏览器启动渲染时，会走一个如下的机制。</p>
+<p>​																		DOM Tree</p>
+<p>JS(AST,JIT)--&gt; 宏脚本执行 --&gt; Event Loop --&gt; 	+	--&gt;  Render Tree --&gt;  Layout --&gt;  Paint --&gt; Compositing</p>
+<p>​																		CSS Rule Tree</p>
+<ul>
+<li>Render Tree	由Dom和CSS计算出的dom节点应具有的样式树</li>
+<li>Layout      计算Dom节点的布局</li>
+<li>Paint         计算DOm节点的渲染样式</li>
+<li>Compositing   计算整个渲染过程可以分为几个图层，有合成器线程来执行。</li>
+</ul>
+<p>在这个过程执行完毕，又会回到Event Loop阶段，如果发生了对Dom的操作，将会判断回不回去走后续的流程，否则会一直循环在Event Loop。比如：</p>
+<ul>
+<li>Dom的布局发生了变化，会到Layout阶段（回流/reflow）</li>
+<li>Dom的某些不影响布局的样式发生变化，回到Paint阶段（重绘/repaint）</li>
+<li>对于那些属性会触发回流或者重绘，可以参考
+<ul>
+<li>https://www.html5rocks.com/zh/tutorials/speed/high-performance-animations/</li>
+</ul>
+</li>
+</ul>
+<p>对于Compositing阶段，浏览器中的Render Process，会分出一个 合成器线程，将整个渲染页面分多个图层来绘制（光栅化），然后将每个图层的纹理都交给GPU来渲染，不去让CPU计算渲染像素的规则，达到“加速”渲染的效果。</p>
+<p>我们常用的CSS硬件加速（GPU加速）就是上述所说的策略</p>
+<p>出发该策略有很多种方式，但也很复杂。我们可以采用最简单的一种方式。</p>
+<ul>
+<li>出发CSS的3D变换</li>
+</ul>
+<pre><code class="language-css">.cube {
+   -webkit-transform: translateZ(0);
+   -moz-transform: translateZ(0);
+   -ms-transform: translateZ(0);
+   -o-transform: translateZ(0);
+   transform: translateZ(0);
+   /* Other transform properties here */
+}
+</code></pre>
+<blockquote>
+<p>https://www.cnblogs.com/rubylouvre/p/3471490.html</p>
+</blockquote>
+<ul>
+<li>will-change属性</li>
+</ul>
+<pre><code class="language-css">div{
+  will-change:auto;	
+}
+/*
+	will-change 的值是告诉浏览器有哪些属性会变化，auto就是让浏览器自己判断。
+*/
+</code></pre>
+<p>对于浏览器渲染的调试，我们可以打开开发者工具</p>
+<ul>
+<li>按下ESC，在console旁边有 三个点 的可点击区域</li>
+<li>点击 Rendering</li>
+<li>勾选 Paint Flashing，Layout ，Layer</li>
+</ul>
+<p>我们就可以分别看到 重绘，回流，和 分层 的情况了。</p>
+</div><div class="toc-container"><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E7%9A%84%E8%BF%87%E7%A8%8B">浏览器渲染的过程</a></li>
+</ul>
+</li>
+</ul>
+</div></div></article><div class="next-post"><div class="next">下一篇</div><a href="https://czh.im/post/liu-lan-qi-shi-jian-passive/"><h3 class="post-title">浏览器事件-passive</h3></a></div></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
+        hljs.initHighlightingOnLoad()
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+        // This should probably be throttled.
+        // Especially because it triggers during smooth scrolling.
+        // https://lodash.com/docs/4.17.10#throttle
+        // You could do like...
+        // window.addEventListener("scroll", () => {
+        //    _.throttle(doThatStuff, 100);
+        // });
+        // Only not doing it here to keep this Pen dependency-free.
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+    </script></body></html>
