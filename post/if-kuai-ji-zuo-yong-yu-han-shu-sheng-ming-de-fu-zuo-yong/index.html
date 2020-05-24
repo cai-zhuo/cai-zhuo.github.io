@@ -1,6 +1,6 @@
-<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>if块级作用域函数声明的副作用 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1590294252807"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="if块级作用域函数声明的副作用 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="情景
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>if块级作用域函数声明的副作用 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1590294346907"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="if块级作用域函数声明的副作用 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="情景
 在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。
-js var a = 1; if(true){ a = 2; function a(){} a = 3; } console.log(a) // a = 2..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1590294252807" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">if块级作用域函数声明的副作用</h2><div class="post-info"><span>2020-04-15</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="情景">情景</h2>
+js var a = 1; if(true){ a = 2; function a(){} a = 3; } console.log(a) // a = 2..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1590294346907" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">if块级作用域函数声明的副作用</h2><div class="post-info"><span>2020-04-15</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="情景">情景</h2>
 <p>在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。<br>
 <code>js var a = 1; if(true){ a = 2; function a(){} a = 3; } console.log(a) // a = 2;</code><br>
 一般我们默认为，function a (){}  语句 会提升到块级作用域的顶端<br>
@@ -8,19 +8,19 @@ js var a = 1; if(true){ a = 2; function a(){} a = 3; } console.log(a) // a = 2..
 <h2 id="副作用">副作用</h2>
 <p>但是会发现，变量a的值发生了变化。其实是因为函数声明会有<strong>副作用</strong>声明的确会提升，但是在原本的位置上，仍然会对程序有一定的影响。<br>
 也就是程序在执行到原本的位置时候，会将块级作用域中的同名局部变量，同步到全局中的同名全局变量。<br>
-在同一层块级作用域，会发生多次同步。而在嵌套if作用域中，只会发生第一次同步。<br>
-``` js<br>
-var a = 1;<br>
-if(true){<br>
-a = 2;<br>
-function a(){}<br>
-if(true){<br>
-a = 3;<br>
-function a(){var b ;}<br>
-}<br>
-}</p>
-<pre><code>console.log(a) // a = 2;
-```
+在同一层块级作用域，会发生多次同步。而在嵌套if作用域中，只会发生第一次同步。</p>
+<pre><code class="language-js">    var a = 1;
+    if(true){
+        a = 2;
+        function a(){}
+        if(true){
+            a = 3;
+            function a(){var b ;}
+        }
+    }
+
+    console.log(a) // a = 2;
+    ```
 </code></pre>
 </div><div class="toc-container"><ul class="markdownIt-TOC">
 <li>
