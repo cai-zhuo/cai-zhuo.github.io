@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-05-22T13:09:53.754Z</updated>
+    <updated>2020-05-24T04:24:21.066Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -274,11 +274,13 @@ timeout												// -&gt;顺序发生了变化</p>
         <link href="https://czh.im/post/if-kuai-ji-zuo-yong-yu-han-shu-sheng-ming-de-fu-zuo-yong/">
         </link>
         <updated>2020-04-15T07:04:40.000Z</updated>
-        <content type="html"><![CDATA[<p>在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。<br>
+        <content type="html"><![CDATA[<h2 id="情景">情景</h2>
+<p>在一般情况下，我们都会注意到函数声明时，会将函数提升到整个块级作用域的顶层。<br>
 <code>js var a = 1; if(true){ a = 2; function a(){} a = 3; } console.log(a) // a = 2;</code><br>
 一般我们默认为，function a (){}  语句 会提升到块级作用域的顶端<br>
-<code>js var a = 1; if(true){ function a(){} a = 2; a =3; } console.log(a) // a = 3;</code><br>
-但是会发现，变量a的值发生了变化。其实是因为函数声明会有<strong>副作用</strong>声明的确会提升，但是在原本的位置上，仍然会对程序有一定的影响。<br>
+<code>js var a = 1; if(true){ function a(){} a = 2; a =3; } console.log(a) // a = 3;</code></p>
+<h2 id="副作用">副作用</h2>
+<p>但是会发现，变量a的值发生了变化。其实是因为函数声明会有<strong>副作用</strong>声明的确会提升，但是在原本的位置上，仍然会对程序有一定的影响。<br>
 也就是程序在执行到原本的位置时候，会将块级作用域中的同名局部变量，同步到全局中的同名全局变量。<br>
 在同一层块级作用域，会发生多次同步。而在嵌套if作用域中，只会发生第一次同步。<br>
 ``` js<br>
