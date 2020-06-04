@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-05-26T05:26:24.877Z</updated>
+    <updated>2020-06-04T11:40:45.377Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -10,6 +10,29 @@
     <logo>https://czh.im/images/avatar.png</logo>
     <icon>https://czh.im/favicon.ico</icon>
     <rights>All rights reserved 2020, CZh.IM</rights>
+    <entry>
+        <title type="html"><![CDATA[react 配置 less]]></title>
+        <id>https://czh.im/post/react-pei-zhi-less/</id>
+        <link href="https://czh.im/post/react-pei-zhi-less/">
+        </link>
+        <updated>2020-06-04T11:33:34.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="导出webpack配置文件">导出webpack配置文件</h1>
+<blockquote>
+<p>yarn run eject<br>
+在生成的config目录下修改webpack.config.js,</p>
+</blockquote>
+<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1591270594909.jpg" alt="" loading="lazy"></figure>
+<h1 id="修改getstyleloader函数">修改getStyleLoader函数</h1>
+<p><img src="https://czh.im/post-images/1591270654429.jpg" alt="" loading="lazy"><br>
+<img src="https://czh.im/post-images/1591270689402.jpg" alt="" loading="lazy"></p>
+<h1 id="修改module">修改module</h1>
+<p><img src="https://czh.im/post-images/1591270791482.jpg" alt="" loading="lazy"><br>
+<img src="https://czh.im/post-images/1591270821965.jpg" alt="" loading="lazy"></p>
+<blockquote>
+<p>yarn run start</p>
+</blockquote>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[有关浏览器渲染（Compositing）]]></title>
         <id>https://czh.im/post/you-guan-liu-lan-qi-xuan-ran-compositing/</id>
