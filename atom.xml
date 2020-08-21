@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-06-04T11:52:12.444Z</updated>
+    <updated>2020-08-21T07:22:15.770Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -777,7 +777,10 @@ const router = (()=&gt;{
         <content type="html"><![CDATA[<blockquote>
 <p>补充：2020/5/20<br>
 慎用 “|” 用来取整<br>
-“数字一大就GG了，性能和Math.floor()不相上下”</p>
+“数字一大就GG了，性能和Math.floor()不相上下”<br>
+2020/8/21<br>
+JS中慎用位运算，JS中的位运算继承自JAVA，采取的是用 int 类型进行位运算，但是JS中只有 double 类型，需要从double转换成int，所以会很耗时，性能就显得不那么出色，并且数字变大以后会出现错误。<br>
+但是在node中，如果涉及大量的位运算，可以采取编写C++来嵌入进node中，以此来提高性能。</p>
 </blockquote>
 <ol>
 <li>
