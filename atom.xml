@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-08-31T04:45:31.644Z</updated>
+    <updated>2020-09-02T01:43:50.471Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -10,6 +10,34 @@
     <logo>https://czh.im/images/avatar.png</logo>
     <icon>https://czh.im/favicon.ico</icon>
     <rights>All rights reserved 2020, CZh.IM</rights>
+    <entry>
+        <title type="html"><![CDATA[前端工程化搭建 错误记录]]></title>
+        <id>https://czh.im/post/qian-duan-gong-cheng-hua-da-jian-cuo-wu-ji-lu/</id>
+        <link href="https://czh.im/post/qian-duan-gong-cheng-hua-da-jian-cuo-wu-ji-lu/">
+        </link>
+        <updated>2020-09-02T01:28:16.000Z</updated>
+        <content type="html"><![CDATA[<ol>
+<li>webpack 插件中，正确的html插件为 html-webpack-plugin , 而 webpack-html-plugin 会报错。</li>
+<li>在使用 @typescript-eslint 时，eslintrc.js 文件中<br>
+project 字段为 './tsconfig.json' ,但是此时会报一个编译错误。</li>
+</ol>
+<pre><code class="language-cmd">0:0  error  Parsing error: &quot;parserOptions.project&quot; has been set for
+@typescript-eslint/parser.
+The file does not match your project config: .eslintrc.js.
+The file must be included in at least one of the projects provided
+</code></pre>
+<p>这个问题在 @typescript-eslint 的 github 上，作为 issue 已经被解决，但是在我这里仍然出现了问题，可能是版本问题。<br>
+解决方法：</p>
+<ol>
+<li>正确的配置 tsconfig.json 中的 include 字段，确保只包含项目中的文件。</li>
+<li>使用 extends 字段让 eslint 进行扩展。<br>
+(详情)[https://github.com/typescript-eslint/typescript-eslint/issues/1159]</li>
+<li>在 eslintrc.js 中 parserOptions 字段下 添加 createDefaultProgram: true<br>
+这个方法可能会影响 IDE 使用相关eslint插件时的性能，但是可以解决上述问题。<br>
+(详情)[https://github.com/typescript-eslint/typescript-eslint/issues/864]</li>
+</ol>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[react 配置 less]]></title>
         <id>https://czh.im/post/react-pei-zhi-less/</id>
