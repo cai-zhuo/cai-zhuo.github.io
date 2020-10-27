@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-10-27T04:41:19.972Z</updated>
+    <updated>2020-10-27T15:06:37.953Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -10,6 +10,48 @@
     <logo>https://czh.im/images/avatar.png</logo>
     <icon>https://czh.im/favicon.ico</icon>
     <rights>All rights reserved 2020, CZh.IM</rights>
+    <entry>
+        <title type="html"><![CDATA[响应式图片]]></title>
+        <id>https://czh.im/post/xiang-ying-shi-tu-pian/</id>
+        <link href="https://czh.im/post/xiang-ying-shi-tu-pian/">
+        </link>
+        <updated>2020-10-27T15:01:44.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
+<pre><code class="language-js">function loadCustomScaleImage(src, density) {
+  const img = new Image();
+
+  img.src = src;
+  // 原本图片大小的x倍像素密度，一个屏幕像素占据图片的x个像素
+  // 等同于 srcset=&quot;./WechatIMG6.jpeg ${density}x&quot;
+  img.srcset = `${src} ${density}x`;
+
+  document.getElementById('scaleBox').appendChild(img);
+}
+</code></pre>
+<h2 id="响应式图片">响应式图片</h2>
+<pre><code class="language-js">/*
+   响应式图片 利用 w 描述符 来计算像素密度
+   设 img 中 sizes 规定的大小为 源大小
+   设 img 中 w 描述符 规定的大小为 描述大小
+   计算过程为 描述大小 / 源大小
+   计算结果为 像素密度 也就是 x描述符的值
+
+   假设该图片大小为 5068，源大小默认为 窗口宽度(821)
+   计算结果约为 6.172
+   也就是等同于 srcset=&quot;./WechatIMG6.jpeg 6.172x&quot;
+*/
+function loadResponsiveImage(src, sizes) {
+  const img = new Image();
+
+  img.src = src;
+  img.srcset = `${src} ${img.naturalWidth * shrink}w`;
+  img.sizes = sizes + 'px';
+  document.getElementById('responsiveBox').appendChild(img);
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[V8中形状和内联缓存是如何优化对象和数组的访问的]]></title>
         <id>https://czh.im/post/v8-zhong-xing-zhuang-he-nei-lian-huan-cun-shi-ru-he-you-hua-dui-xiang-he-shu-zu-de-fang-wen-de/</id>
@@ -19,7 +61,7 @@
         <content type="html"><![CDATA[<h2 id="javascript-引擎工作流程">JavaScript 引擎工作流程</h2>
 <p>在 V8 中，JS引擎的工作流程如下，从源代码开始，由编译器解析成 AST，再交由解释器生成<strong>字节码</strong>。</p>
 <p>为了使得代码运行的更快，V8 内部会将字节码和分析数据( profiling data ) 一起发送给 优化编译器，生成优化过的<strong>机器码</strong>。当生成的机器码在运行之前被假定为不正确的，会重新回退生成字节码。</p>
-<figure data-type="image" tabindex="1"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-1.svg" alt="2018-06-17-Shapes-ICs-1" loading="lazy"></figure>
+<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811139477.svg" alt="" loading="lazy"></figure>
 <ol>
 <li>一般的 JS 引擎都会有一个解释器和优化编译器。其中解释器可以快速生成为优化的字节码，优化编译器会使用<strong>更长的时间</strong>生成<strong>运行更快</strong>的机器码</li>
 <li>V8 的解释器被叫做 <strong>Ignition</strong>，优化编译器叫做<strong>Turbofan</strong></li>
@@ -29,7 +71,9 @@
 <li>
 <p>属性的访问</p>
 <p>在 ECMA 的规范中，所有JavaScript 的对象的键值对都会映射到一个叫 property 的字典表中。</p>
-<figure data-type="image" tabindex="2"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-7.svg" alt="2018-06-17-Shapes-ICs-7" loading="lazy"></figure>
+</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="https://czh.im/post-images/1603811145711.svg" alt="" loading="lazy"></figure>
 <p>除 <code>[[Value]]</code> 外，规范还定义了如下属性：</p>
 <ul>
 <li>
@@ -45,15 +89,17 @@
 </ul>
 <p>[[ 双方括号 ]] 表示 引擎不会暴露给 JavaScript 的属性，但是可以通过 Object.getOwnPropertyDescriptor 来访问到。</p>
 <p>在数组中也一样。数组就是特殊的对象。</p>
-</li>
+<ol start="2">
 <li>
 <p>属性访问的优化</p>
 <p>在 JavaScript 中，对象的属性访问是最常见的操作，并且这个操作的速度将很大的影响程序运行的错误。</p>
 <p>在实现上，引擎采用了一个形状（也叫 隐藏类）的机制。</p>
-<figure data-type="image" tabindex="3"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-11.svg" alt="2018-06-17-Shapes-ICs-11" loading="lazy"></figure>
+</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://czh.im/post-images/1603811153746.svg" alt="" loading="lazy"></figure>
 <p>具有相同属性名，并且顺序一样的对象会指向相同的 <strong>形状</strong>。形状记录了 除 [[value]] 以外的元信息，以及一个offset的整型属性。</p>
 <p>而原本的对象只需要记录所有的值，存在一个列表中，访问时通过偏移量来访问即可。<strong>无论有多少个对象，只要它们具有相同的形状，我们只需要将它们的形状与键值属性信息存储一次</strong> 。</p>
-</li>
+<ol start="3">
 <li>
 <p>Transition 链和树</p>
 <pre><code class="language-js">const object = {};
@@ -62,28 +108,29 @@ object.y = 6;
 </code></pre>
 <p>当代码中有这样的操作时，就会形成一个 transition链。</p>
 <p>该对象在初始化时没有任何属性，因此它指向一个空的 shape。</p>
-<figure data-type="image" tabindex="4"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-14.svg" alt="2018-06-17-Shapes-ICs-14" loading="lazy"></figure>
+</li>
+</ol>
+<figure data-type="image" tabindex="4"><img src="https://czh.im/post-images/1603811162695.svg" alt="" loading="lazy"></figure>
 <p>下一个语句为该对象添加值为 <code>5</code> 的属性 <code>“x”</code>，所以 JavaScript 引擎转向一个包含属性 <code>“x”</code> 的 Shape，并向 <code>JSObject</code> 的第一个偏移量为0处添加了一个值 <code>5</code>。</p>
 <p>接下来一个语句添加了一个属性 <code>'y'</code>，引擎便转向另一个包含 <code>'x'</code> 和 <code>'y'</code> 的 Shape，并将值 <code>6</code> 附加到 <code>JSObject</code>（位于偏移量 <code>1</code> 处）。</p>
 <p>我们不需要为每个 Shape 存储完整的属性表。相反，每个 Shape 只需要知道它引入的新属性。</p>
-<p>例如在此例中，我们不必在最后一个 Shape 中存储关于 <code>'x'</code> 的信息，因为它可以在更早的链上被找到。要做到这一点，每一个 Shape 都会与其之前的 Shape 相连。</p>
+<pre><code>例如在此例中，我们不必在最后一个 Shape 中存储关于 `'x'` 的信息，因为它可以在更早的链上被找到。要做到这一点，每一个 Shape 都会与其之前的 Shape 相连。
+</code></pre>
 <pre><code class="language-js">const object1 = {};
 object1.x = 5;
 const object2 = {};
 object2.y = 6;
 </code></pre>
 <p>而在这种情况下，我们必须进行分支操作。</p>
-<figure data-type="image" tabindex="5"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-15.svg" alt="2018-06-17-Shapes-ICs-15" loading="lazy"></figure>
+<figure data-type="image" tabindex="5"><img src="https://czh.im/post-images/1603811169890.svg" alt="" loading="lazy"></figure>
 <p>形状的生成也并不意味着，总从空形状开始，这取决于一开始定义对象的值。</p>
-</li>
-</ol>
 <h2 id="内联缓存inline-caches-or-ics">内联缓存(inline caches or ICs)</h2>
 <pre><code class="language-js">function getX(o) {
 	return o.x;
 }
 </code></pre>
 <p>当有了形状的机制，就可以为函数的参数访问进行优化</p>
-<figure data-type="image" tabindex="6"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-19.svg" alt="2018-06-17-Shapes-ICs-19" loading="lazy"></figure>
+<figure data-type="image" tabindex="6"><img src="https://czh.im/post-images/1603811177764.svg" alt="" loading="lazy"></figure>
 <p>getX会被解析为两条指令</p>
 <ul>
 <li><code>get_by_id</code> 从第一个参数（<code>arg1</code>）中加载属性 <code>'x'</code> 值并将其存储到地址 <code>loc0</code> 中。</li>
@@ -96,7 +143,7 @@ object2.y = 6;
 ];
 </code></pre>
 <p>考虑如上数组。</p>
-<figure data-type="image" tabindex="7"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-22.svg" alt="2018-06-17-Shapes-ICs-22" loading="lazy"></figure>
+<figure data-type="image" tabindex="7"><img src="https://czh.im/post-images/1603811187226.svg" alt="" loading="lazy"></figure>
 <p>每个数组都有一个单独的 <em>elements backing store</em>，其中包含所有数组索引的属性值。JavaScript 引擎不必为数组元素存储任何属性特性，因为它们通常都是可写的，可枚举的以及可配置的。JavaScript 引擎利用这一点，将数组元素与其他命名属性分开存储。</p>
 <p>由于上述操作将 数组元素的属性当做了默认的属性。所以讲数组元素放进 Elements 列表来处理。如果改变了数组元素的元属性呢</p>
 <pre><code class="language-js">const array = Object.defineProperty(
@@ -110,7 +157,7 @@ object2.y = 6;
 	}
 );
 </code></pre>
-<figure data-type="image" tabindex="8"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-23.svg" alt="2018-06-17-Shapes-ICs-23" loading="lazy"></figure>
+<figure data-type="image" tabindex="8"><img src="https://czh.im/post-images/1603811193116.svg" alt="" loading="lazy"></figure>
 <p>不要这样做，这样会导致 数组的元素 存放在一个 字典表里面（Dictionary Elements），这种方式来查找数组元素是缓慢且低效的。</p>
 <p>因为不是通过下标偏移量来查找，而是当做了类似于普通对象的键值对查找，每个下标都对应一个属性特性 ( property attributes )</p>
 ]]></content>
@@ -840,90 +887,6 @@ const router = (()=&gt;{
 </ul>
 </li>
 </ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[EVENT LOOP]]></title>
-        <id>https://czh.im/post/event-loop/</id>
-        <link href="https://czh.im/post/event-loop/">
-        </link>
-        <updated>2020-04-04T03:21:39.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="在javascript运行机制中依赖event-loop决定代码先后执行的顺序">在JavaScript运行机制中，依赖EVENT LOOP，决定代码先后执行的顺序。</h2>
-<p>Javascript执行过程</p>
-<ol>
-<li>执行栈内任务，遇到setTimeout，setImmediate，等API，将回调放入宏队列，遇到process.nextTick,Promise等，将回调放入微队列</li>
-<li>将微队列的任务逐个推入主线程，将遇到的API回调放入相应队列</li>
-<li>微队列空时并且栈空，将宏队列的任务逐个推到主线程</li>
-<li>宏队列空时，将微队列的任务推入主线程（在nodeJS中，宏队列的每个阶段执行完毕时，都会去执行微队列）</li>
-<li>直到所有队列任务执行完毕。</li>
-</ol>
-<ul>
-<li>
-<p>javaScript中。分为主线程（STACK），其他线程（WEB APIs,others），宏队列（macrotask），微队列(microtask)。</p>
-</li>
-<li>
-<p>区别</p>
-<ol>
-<li>
-<p>在浏览器中，微队列可以认为在宏队列之内</p>
-<img src="https://segmentfault.com/img/remote/1460000016278118?w=710&amp;h=749" alt="browser-eventloop" style="zoom: 67%;" />
-</li>
-<li>
-<p>在nodeJS中，微队列在宏队列之间，宏队列和微队列分为各个不同的队列</p>
-<p>各队列同样依靠一个循环来决定执行顺序。</p>
-<p><mark>宏队列</mark></p>
-<img src="https://segmentfault.com/img/remote/1460000016278121?w=951&amp;h=526" alt="node-eventloop" style="zoom: 80%;" />
-<p><mark>微队列</mark></p>
- <img src="https://segmentfault.com/img/remote/1460000016278122?w=420&amp;h=433" alt="node-microtaskqueue" style="zoom: 80%;" /> 
-</li>
-<li>
-<p>在微队列中，NextTick QUeue优先于Other Micro Queue</p>
-</li>
-<li>
-<p>在微队列周期中，新的任务进入了队列，那么这个任务也将在这个周期执行，但在宏队列中不是。</p>
-</li>
-<li>
-<p>只有在栈空的时候才会考虑宏队列和微队列的任务</p>
-<p>所以在事件执行时，手动触发 和 代码执行执行的顺序会有区别</p>
-<pre><code class="language-js">div.addEventListener('click',()=&gt;{
-    Promise.resolve().then(()=&gt;{
-    	console.log(&quot;resolved&quot;);
-	})
-    setTimeout(()=&gt;{
-        console.log(&quot;timeout&quot;)
-    },0)
-})
-//方案1:
-//tap twice  ...
-//方案2:
-//click();
-//click()
-</code></pre>
-<p>结果如下</p>
-<ul>
-<li>
-<p>tap twice..</p>
-<blockquote>
-<p>resolved</p>
-<p>timeout</p>
-<p>resolved</p>
-<p>timeout</p>
-</blockquote>
-</li>
-<li>
-<p>run click() twice</p>
-<blockquote>
-<p>resolved</p>
-<p>resolved</p>
-<p>timeout</p>
-<p>timeout</p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

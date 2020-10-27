@@ -1,0 +1,82 @@
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603811194261"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="利用srcset 属性对 图片进行缩放
+function loadCustomScaleImage(src, density) {
+  const img = new Image();
+
+  img.src = src;
+  // 原本图片..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603811194261" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>1 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
+<pre><code class="language-js">function loadCustomScaleImage(src, density) {
+  const img = new Image();
+
+  img.src = src;
+  // 原本图片大小的x倍像素密度，一个屏幕像素占据图片的x个像素
+  // 等同于 srcset=&quot;./WechatIMG6.jpeg ${density}x&quot;
+  img.srcset = `${src} ${density}x`;
+
+  document.getElementById('scaleBox').appendChild(img);
+}
+</code></pre>
+<h2 id="响应式图片">响应式图片</h2>
+<pre><code class="language-js">/*
+   响应式图片 利用 w 描述符 来计算像素密度
+   设 img 中 sizes 规定的大小为 源大小
+   设 img 中 w 描述符 规定的大小为 描述大小
+   计算过程为 描述大小 / 源大小
+   计算结果为 像素密度 也就是 x描述符的值
+
+   假设该图片大小为 5068，源大小默认为 窗口宽度(821)
+   计算结果约为 6.172
+   也就是等同于 srcset=&quot;./WechatIMG6.jpeg 6.172x&quot;
+*/
+function loadResponsiveImage(src, sizes) {
+  const img = new Image();
+
+  img.src = src;
+  img.srcset = `${src} ${img.naturalWidth * shrink}w`;
+  img.sizes = sizes + 'px';
+  document.getElementById('responsiveBox').appendChild(img);
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
+</div><div class="toc-container"><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%88%A9%E7%94%A8srcset-%E5%B1%9E%E6%80%A7%E5%AF%B9-%E5%9B%BE%E7%89%87%E8%BF%9B%E8%A1%8C%E7%BC%A9%E6%94%BE">利用srcset 属性对 图片进行缩放</a></li>
+<li><a href="#%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9B%BE%E7%89%87">响应式图片</a></li>
+</ul>
+</li>
+</ul>
+</div></div></article><div class="next-post"><div class="next">下一篇</div><a href="https://czh.im/post/v8-zhong-xing-zhuang-he-nei-lian-huan-cun-shi-ru-he-you-hua-dui-xiang-he-shu-zu-de-fang-wen-de/"><h3 class="post-title">V8中形状和内联缓存是如何优化对象和数组的访问的</h3></a></div></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
+        hljs.initHighlightingOnLoad()
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+        // This should probably be throttled.
+        // Especially because it triggers during smooth scrolling.
+        // https://lodash.com/docs/4.17.10#throttle
+        // You could do like...
+        // window.addEventListener("scroll", () => {
+        //    _.throttle(doThatStuff, 100);
+        // });
+        // Only not doing it here to keep this Pen dependency-free.
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+    </script></body></html>
