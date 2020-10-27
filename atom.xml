@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-10-05T07:54:36.702Z</updated>
+    <updated>2020-10-27T04:41:19.972Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -10,6 +10,111 @@
     <logo>https://czh.im/images/avatar.png</logo>
     <icon>https://czh.im/favicon.ico</icon>
     <rights>All rights reserved 2020, CZh.IM</rights>
+    <entry>
+        <title type="html"><![CDATA[V8中形状和内联缓存是如何优化对象和数组的访问的]]></title>
+        <id>https://czh.im/post/v8-zhong-xing-zhuang-he-nei-lian-huan-cun-shi-ru-he-you-hua-dui-xiang-he-shu-zu-de-fang-wen-de/</id>
+        <link href="https://czh.im/post/v8-zhong-xing-zhuang-he-nei-lian-huan-cun-shi-ru-he-you-hua-dui-xiang-he-shu-zu-de-fang-wen-de/">
+        </link>
+        <updated>2020-10-27T04:40:49.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="javascript-引擎工作流程">JavaScript 引擎工作流程</h2>
+<p>在 V8 中，JS引擎的工作流程如下，从源代码开始，由编译器解析成 AST，再交由解释器生成<strong>字节码</strong>。</p>
+<p>为了使得代码运行的更快，V8 内部会将字节码和分析数据( profiling data ) 一起发送给 优化编译器，生成优化过的<strong>机器码</strong>。当生成的机器码在运行之前被假定为不正确的，会重新回退生成字节码。</p>
+<figure data-type="image" tabindex="1"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-1.svg" alt="2018-06-17-Shapes-ICs-1" loading="lazy"></figure>
+<ol>
+<li>一般的 JS 引擎都会有一个解释器和优化编译器。其中解释器可以快速生成为优化的字节码，优化编译器会使用<strong>更长的时间</strong>生成<strong>运行更快</strong>的机器码</li>
+<li>V8 的解释器被叫做 <strong>Ignition</strong>，优化编译器叫做<strong>Turbofan</strong></li>
+</ol>
+<h2 id="javascript-对象模型object-model">JavaScript 对象模型(Object Model)</h2>
+<ol>
+<li>
+<p>属性的访问</p>
+<p>在 ECMA 的规范中，所有JavaScript 的对象的键值对都会映射到一个叫 property 的字典表中。</p>
+<figure data-type="image" tabindex="2"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-7.svg" alt="2018-06-17-Shapes-ICs-7" loading="lazy"></figure>
+<p>除 <code>[[Value]]</code> 外，规范还定义了如下属性：</p>
+<ul>
+<li>
+<p><code>[[Writable]]</code> 决定该属性是否可写</p>
+</li>
+<li>
+<p><code>[[Enumerable]]</code> 决定对象是否可被遍历</p>
+</li>
+<li>
+<p><code>[[Configurable]]</code> 决定该属性是否可被删除。</p>
+<p>参考 MDN 对象元属性。</p>
+</li>
+</ul>
+<p>[[ 双方括号 ]] 表示 引擎不会暴露给 JavaScript 的属性，但是可以通过 Object.getOwnPropertyDescriptor 来访问到。</p>
+<p>在数组中也一样。数组就是特殊的对象。</p>
+</li>
+<li>
+<p>属性访问的优化</p>
+<p>在 JavaScript 中，对象的属性访问是最常见的操作，并且这个操作的速度将很大的影响程序运行的错误。</p>
+<p>在实现上，引擎采用了一个形状（也叫 隐藏类）的机制。</p>
+<figure data-type="image" tabindex="3"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-11.svg" alt="2018-06-17-Shapes-ICs-11" loading="lazy"></figure>
+<p>具有相同属性名，并且顺序一样的对象会指向相同的 <strong>形状</strong>。形状记录了 除 [[value]] 以外的元信息，以及一个offset的整型属性。</p>
+<p>而原本的对象只需要记录所有的值，存在一个列表中，访问时通过偏移量来访问即可。<strong>无论有多少个对象，只要它们具有相同的形状，我们只需要将它们的形状与键值属性信息存储一次</strong> 。</p>
+</li>
+<li>
+<p>Transition 链和树</p>
+<pre><code class="language-js">const object = {};
+object.x = 5;
+object.y = 6;
+</code></pre>
+<p>当代码中有这样的操作时，就会形成一个 transition链。</p>
+<p>该对象在初始化时没有任何属性，因此它指向一个空的 shape。</p>
+<figure data-type="image" tabindex="4"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-14.svg" alt="2018-06-17-Shapes-ICs-14" loading="lazy"></figure>
+<p>下一个语句为该对象添加值为 <code>5</code> 的属性 <code>“x”</code>，所以 JavaScript 引擎转向一个包含属性 <code>“x”</code> 的 Shape，并向 <code>JSObject</code> 的第一个偏移量为0处添加了一个值 <code>5</code>。</p>
+<p>接下来一个语句添加了一个属性 <code>'y'</code>，引擎便转向另一个包含 <code>'x'</code> 和 <code>'y'</code> 的 Shape，并将值 <code>6</code> 附加到 <code>JSObject</code>（位于偏移量 <code>1</code> 处）。</p>
+<p>我们不需要为每个 Shape 存储完整的属性表。相反，每个 Shape 只需要知道它引入的新属性。</p>
+<p>例如在此例中，我们不必在最后一个 Shape 中存储关于 <code>'x'</code> 的信息，因为它可以在更早的链上被找到。要做到这一点，每一个 Shape 都会与其之前的 Shape 相连。</p>
+<pre><code class="language-js">const object1 = {};
+object1.x = 5;
+const object2 = {};
+object2.y = 6;
+</code></pre>
+<p>而在这种情况下，我们必须进行分支操作。</p>
+<figure data-type="image" tabindex="5"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-15.svg" alt="2018-06-17-Shapes-ICs-15" loading="lazy"></figure>
+<p>形状的生成也并不意味着，总从空形状开始，这取决于一开始定义对象的值。</p>
+</li>
+</ol>
+<h2 id="内联缓存inline-caches-or-ics">内联缓存(inline caches or ICs)</h2>
+<pre><code class="language-js">function getX(o) {
+	return o.x;
+}
+</code></pre>
+<p>当有了形状的机制，就可以为函数的参数访问进行优化</p>
+<figure data-type="image" tabindex="6"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-19.svg" alt="2018-06-17-Shapes-ICs-19" loading="lazy"></figure>
+<p>getX会被解析为两条指令</p>
+<ul>
+<li><code>get_by_id</code> 从第一个参数（<code>arg1</code>）中加载属性 <code>'x'</code> 值并将其存储到地址 <code>loc0</code> 中。</li>
+<li><code>return loc0</code>  返回我们存储到 <code>loc0</code> 中的内容。</li>
+</ul>
+<p>引擎会将两个值嵌入到 <code>get_by_id</code> 指令中， shape 和偏移量。这样在下次查找参数的值时，如果形状没有发生改变，就可以直接通过偏移量来查找，跳过费时的属性信息查找，这比每次查找属性要快得多</p>
+<h2 id="高效存储数组">高效存储数组</h2>
+<pre><code class="language-js">const array = [
+	'#jsconfeu',
+];
+</code></pre>
+<p>考虑如上数组。</p>
+<figure data-type="image" tabindex="7"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-22.svg" alt="2018-06-17-Shapes-ICs-22" loading="lazy"></figure>
+<p>每个数组都有一个单独的 <em>elements backing store</em>，其中包含所有数组索引的属性值。JavaScript 引擎不必为数组元素存储任何属性特性，因为它们通常都是可写的，可枚举的以及可配置的。JavaScript 引擎利用这一点，将数组元素与其他命名属性分开存储。</p>
+<p>由于上述操作将 数组元素的属性当做了默认的属性。所以讲数组元素放进 Elements 列表来处理。如果改变了数组元素的元属性呢</p>
+<pre><code class="language-js">const array = Object.defineProperty(
+	[],
+	'0',
+	{
+		value: 'Oh noes!!1',
+		writable: false,
+		enumerable: false,
+		configurable: false,
+	}
+);
+</code></pre>
+<figure data-type="image" tabindex="8"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-23.svg" alt="2018-06-17-Shapes-ICs-23" loading="lazy"></figure>
+<p>不要这样做，这样会导致 数组的元素 存放在一个 字典表里面（Dictionary Elements），这种方式来查找数组元素是缓慢且低效的。</p>
+<p>因为不是通过下标偏移量来查找，而是当做了类似于普通对象的键值对查找，每个下标都对应一个属性特性 ( property attributes )</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[前端工程化搭建 错误记录]]></title>
         <id>https://czh.im/post/qian-duan-gong-cheng-hua-da-jian-cuo-wu-ji-lu/</id>
@@ -819,98 +924,6 @@ const router = (()=&gt;{
 </ol>
 </li>
 </ul>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Javascript 技巧收集]]></title>
-        <id>https://czh.im/post/javascript-ji-qiao-shou-ji/</id>
-        <link href="https://czh.im/post/javascript-ji-qiao-shou-ji/">
-        </link>
-        <updated>2020-04-04T03:07:11.000Z</updated>
-        <content type="html"><![CDATA[<blockquote>
-<p>补充：2020/5/20<br>
-慎用 “|” 用来取整<br>
-“数字一大就GG了，性能和Math.floor()不相上下”<br>
-2020/8/21<br>
-JS中慎用位运算，JS中的位运算继承自JAVA，采取的是用 int 类型进行位运算，但是JS中只有 double 类型，需要从double转换成int，所以会很耗时，性能就显得不那么出色，并且数字变大以后会出现错误。<br>
-但是在node中，如果涉及大量的位运算，可以采取编写C++来嵌入进node中，以此来提高性能。</p>
-</blockquote>
-<ol>
-<li>
-<p>js通过valueOf获取引用类型的数字，toString获取引用类型的字符串</p>
-</li>
-<li>
-<p>Math.floor (4.9) === 4</p>
-<p>~~   4.9 ===  4</p>
-<p>~~ - 4.9 === -5</p>
-</li>
-<li>
-<p>取整 | 0</p>
-<p>1.3 | 0 ===  1</p>
-<p>-1.3 | 0 === -1</p>
-</li>
-<li>
-<p>判断奇偶数</p>
-<p>const num = 3</p>
-<p>!! (num &amp; 1) === true</p>
-<p>!! (num % 2) === true</p>
-</li>
-<li>
-<p>强制参数（mandatory）</p>
-<pre><code class="language-js">const mandatory = ()=&gt;{
-    throw new Error('Missing Parameter!')
-}
-
-const foo = (bar = mandatory())=&gt;{
-    return bar;
-}
-</code></pre>
-</li>
-<li>
-<p>惰性载入函数</p>
-<p>通过覆写函数，使得下一次不用再进行判断</p>
-<pre><code class="language-js">function foo(){
-    if(a != b){
-        console.log('a')
-    }else{
-        console.log('b')
-    }
-}
-//优化后
-function foo(){
-    if(a != b){
-        foo = function(){
-            console.log('a')
-        }
-    }else{
-        foo = function(){
-            console.log('b')
-        }
-    }
-    foo();	// or return foo()
-}
-</code></pre>
-</li>
-<li>
-<p>一次性函数</p>
-<pre><code class="language-js">let foo = ()=&gt;{
-    console.log('1')
-    foo = ()=&gt;{
-        console.log('2')
-    }
-}
-</code></pre>
-</li>
-<li>
-<p>按位取反巧用</p>
-<pre><code class="language-js">~ 0  === -1  //true
-~-1 ===   0 //true
-
-const arr = [1,2,3];
-~arr.indexOf(4) ? null :arr.push(4) ;
-</code></pre>
-</li>
-</ol>
 ]]></content>
     </entry>
 </feed>

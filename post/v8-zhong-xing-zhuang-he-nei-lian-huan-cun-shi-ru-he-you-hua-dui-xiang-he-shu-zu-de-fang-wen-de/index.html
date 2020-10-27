@@ -1,0 +1,144 @@
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>V8中形状和内联缓存是如何优化对象和数组的访问的 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603773672419"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="V8中形状和内联缓存是如何优化对象和数组的访问的 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="JavaScript 引擎工作流程
+在 V8 中，JS引擎的工作流程如下，从源代码开始，由编译器解析成 AST，再交由解释器生成字节码。
+为了使得代码运行的更快，V8 内部会将字节码和分析数据( profiling data ) 一起发送给..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603773672419" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">V8中形状和内联缓存是如何优化对象和数组的访问的</h2><div class="post-info"><span>2020-10-27</span><span>5 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="javascript-引擎工作流程">JavaScript 引擎工作流程</h2>
+<p>在 V8 中，JS引擎的工作流程如下，从源代码开始，由编译器解析成 AST，再交由解释器生成<strong>字节码</strong>。</p>
+<p>为了使得代码运行的更快，V8 内部会将字节码和分析数据( profiling data ) 一起发送给 优化编译器，生成优化过的<strong>机器码</strong>。当生成的机器码在运行之前被假定为不正确的，会重新回退生成字节码。</p>
+<figure data-type="image" tabindex="1"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-1.svg" alt="2018-06-17-Shapes-ICs-1" loading="lazy"></figure>
+<ol>
+<li>一般的 JS 引擎都会有一个解释器和优化编译器。其中解释器可以快速生成为优化的字节码，优化编译器会使用<strong>更长的时间</strong>生成<strong>运行更快</strong>的机器码</li>
+<li>V8 的解释器被叫做 <strong>Ignition</strong>，优化编译器叫做<strong>Turbofan</strong></li>
+</ol>
+<h2 id="javascript-对象模型object-model">JavaScript 对象模型(Object Model)</h2>
+<ol>
+<li>
+<p>属性的访问</p>
+<p>在 ECMA 的规范中，所有JavaScript 的对象的键值对都会映射到一个叫 property 的字典表中。</p>
+<figure data-type="image" tabindex="2"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-7.svg" alt="2018-06-17-Shapes-ICs-7" loading="lazy"></figure>
+<p>除 <code>[[Value]]</code> 外，规范还定义了如下属性：</p>
+<ul>
+<li>
+<p><code>[[Writable]]</code> 决定该属性是否可写</p>
+</li>
+<li>
+<p><code>[[Enumerable]]</code> 决定对象是否可被遍历</p>
+</li>
+<li>
+<p><code>[[Configurable]]</code> 决定该属性是否可被删除。</p>
+<p>参考 MDN 对象元属性。</p>
+</li>
+</ul>
+<p>[[ 双方括号 ]] 表示 引擎不会暴露给 JavaScript 的属性，但是可以通过 Object.getOwnPropertyDescriptor 来访问到。</p>
+<p>在数组中也一样。数组就是特殊的对象。</p>
+</li>
+<li>
+<p>属性访问的优化</p>
+<p>在 JavaScript 中，对象的属性访问是最常见的操作，并且这个操作的速度将很大的影响程序运行的错误。</p>
+<p>在实现上，引擎采用了一个形状（也叫 隐藏类）的机制。</p>
+<figure data-type="image" tabindex="3"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-11.svg" alt="2018-06-17-Shapes-ICs-11" loading="lazy"></figure>
+<p>具有相同属性名，并且顺序一样的对象会指向相同的 <strong>形状</strong>。形状记录了 除 [[value]] 以外的元信息，以及一个offset的整型属性。</p>
+<p>而原本的对象只需要记录所有的值，存在一个列表中，访问时通过偏移量来访问即可。<strong>无论有多少个对象，只要它们具有相同的形状，我们只需要将它们的形状与键值属性信息存储一次</strong> 。</p>
+</li>
+<li>
+<p>Transition 链和树</p>
+<pre><code class="language-js">const object = {};
+object.x = 5;
+object.y = 6;
+</code></pre>
+<p>当代码中有这样的操作时，就会形成一个 transition链。</p>
+<p>该对象在初始化时没有任何属性，因此它指向一个空的 shape。</p>
+<figure data-type="image" tabindex="4"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-14.svg" alt="2018-06-17-Shapes-ICs-14" loading="lazy"></figure>
+<p>下一个语句为该对象添加值为 <code>5</code> 的属性 <code>“x”</code>，所以 JavaScript 引擎转向一个包含属性 <code>“x”</code> 的 Shape，并向 <code>JSObject</code> 的第一个偏移量为0处添加了一个值 <code>5</code>。</p>
+<p>接下来一个语句添加了一个属性 <code>'y'</code>，引擎便转向另一个包含 <code>'x'</code> 和 <code>'y'</code> 的 Shape，并将值 <code>6</code> 附加到 <code>JSObject</code>（位于偏移量 <code>1</code> 处）。</p>
+<p>我们不需要为每个 Shape 存储完整的属性表。相反，每个 Shape 只需要知道它引入的新属性。</p>
+<p>例如在此例中，我们不必在最后一个 Shape 中存储关于 <code>'x'</code> 的信息，因为它可以在更早的链上被找到。要做到这一点，每一个 Shape 都会与其之前的 Shape 相连。</p>
+<pre><code class="language-js">const object1 = {};
+object1.x = 5;
+const object2 = {};
+object2.y = 6;
+</code></pre>
+<p>而在这种情况下，我们必须进行分支操作。</p>
+<figure data-type="image" tabindex="5"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-15.svg" alt="2018-06-17-Shapes-ICs-15" loading="lazy"></figure>
+<p>形状的生成也并不意味着，总从空形状开始，这取决于一开始定义对象的值。</p>
+</li>
+</ol>
+<h2 id="内联缓存inline-caches-or-ics">内联缓存(inline caches or ICs)</h2>
+<pre><code class="language-js">function getX(o) {
+	return o.x;
+}
+</code></pre>
+<p>当有了形状的机制，就可以为函数的参数访问进行优化</p>
+<figure data-type="image" tabindex="6"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-19.svg" alt="2018-06-17-Shapes-ICs-19" loading="lazy"></figure>
+<p>getX会被解析为两条指令</p>
+<ul>
+<li><code>get_by_id</code> 从第一个参数（<code>arg1</code>）中加载属性 <code>'x'</code> 值并将其存储到地址 <code>loc0</code> 中。</li>
+<li><code>return loc0</code>  返回我们存储到 <code>loc0</code> 中的内容。</li>
+</ul>
+<p>引擎会将两个值嵌入到 <code>get_by_id</code> 指令中， shape 和偏移量。这样在下次查找参数的值时，如果形状没有发生改变，就可以直接通过偏移量来查找，跳过费时的属性信息查找，这比每次查找属性要快得多</p>
+<h2 id="高效存储数组">高效存储数组</h2>
+<pre><code class="language-js">const array = [
+	'#jsconfeu',
+];
+</code></pre>
+<p>考虑如上数组。</p>
+<figure data-type="image" tabindex="7"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-22.svg" alt="2018-06-17-Shapes-ICs-22" loading="lazy"></figure>
+<p>每个数组都有一个单独的 <em>elements backing store</em>，其中包含所有数组索引的属性值。JavaScript 引擎不必为数组元素存储任何属性特性，因为它们通常都是可写的，可枚举的以及可配置的。JavaScript 引擎利用这一点，将数组元素与其他命名属性分开存储。</p>
+<p>由于上述操作将 数组元素的属性当做了默认的属性。所以讲数组元素放进 Elements 列表来处理。如果改变了数组元素的元属性呢</p>
+<pre><code class="language-js">const array = Object.defineProperty(
+	[],
+	'0',
+	{
+		value: 'Oh noes!!1',
+		writable: false,
+		enumerable: false,
+		configurable: false,
+	}
+);
+</code></pre>
+<figure data-type="image" tabindex="8"><img src="/Users/caizhuo/Downloads/2018-06-17-Shapes-ICs-23.svg" alt="2018-06-17-Shapes-ICs-23" loading="lazy"></figure>
+<p>不要这样做，这样会导致 数组的元素 存放在一个 字典表里面（Dictionary Elements），这种方式来查找数组元素是缓慢且低效的。</p>
+<p>因为不是通过下标偏移量来查找，而是当做了类似于普通对象的键值对查找，每个下标都对应一个属性特性 ( property attributes )</p>
+</div><div class="toc-container"><ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#javascript-%E5%BC%95%E6%93%8E%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B">JavaScript 引擎工作流程</a></li>
+<li><a href="#javascript-%E5%AF%B9%E8%B1%A1%E6%A8%A1%E5%9E%8Bobject-model">JavaScript 对象模型(Object Model)</a></li>
+<li><a href="#%E5%86%85%E8%81%94%E7%BC%93%E5%AD%98inline-caches-or-ics">内联缓存(inline caches or ICs)</a></li>
+<li><a href="#%E9%AB%98%E6%95%88%E5%AD%98%E5%82%A8%E6%95%B0%E7%BB%84">高效存储数组</a></li>
+</ul>
+</li>
+</ul>
+</div></div></article><div class="next-post"><div class="next">下一篇</div><a href="https://czh.im/post/qian-duan-gong-cheng-hua-da-jian-cuo-wu-ji-lu/"><h3 class="post-title">前端工程化搭建 错误记录</h3></a></div></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
+        hljs.initHighlightingOnLoad()
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+        // This should probably be throttled.
+        // Especially because it triggers during smooth scrolling.
+        // https://lodash.com/docs/4.17.10#throttle
+        // You could do like...
+        // window.addEventListener("scroll", () => {
+        //    _.throttle(doThatStuff, 100);
+        // });
+        // Only not doing it here to keep this Pen dependency-free.
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+    </script></body></html>
