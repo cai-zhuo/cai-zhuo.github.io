@@ -1,33 +1,6 @@
-<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>通过srcset使用响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603907204810"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="通过srcset使用响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="TODO : 这个w描述符到底咋回事
-利用w描述符实现响应式图片
-/*
-   响应式图片 利用 w 描述符 来计算像素密度
-   设 img 中 sizes 规定的大小为 资源大小
-   设 img 中 w 描述符 规定的大小为 描述大小
-..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603907204810" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">通过srcset使用响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><p>TODO : 这个w描述符到底咋回事</p>
-<h2 id="利用w描述符实现响应式图片">利用w描述符实现响应式图片</h2>
-<pre><code class="language-js">/*
-   响应式图片 利用 w 描述符 来计算像素密度
-   设 img 中 sizes 规定的大小为 资源大小
-   设 img 中 w 描述符 规定的大小为 描述大小
-   计算过程为 描述大小 / 资源大小
-   计算结果为 像素密度 也就是 x描述符的值
-
-   假设该图片大小为 5068，资源大小默认为 窗口宽度(821)
-   计算结果约为 6.172
-   也就是等同于 srcset=&quot;./WechatIMG6.jpeg 6.172x&quot;
-*/
-function loadResponsiveImage(src, sizes) {
-  const img = new Image();
-
-  img.src = src;
-  img.srcset = `${src} ${img.naturalWidth}w`;
-  img.sizes = sizes + 'px';
-  document.getElementById('responsiveBox').appendChild(img);
-}
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
-<h2 id="devicepixelratio-像素设备比">devicePixelRatio 像素设备比</h2>
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>通过srcset使用响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603909357342"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="通过srcset使用响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="devicePixelRatio 像素设备比
+devicePixelRatio = 物理像素数量 / dips
+dips 是 设备独立像素，可以理解为 css 的逻辑像素，可以通过 srceen.width * screen.height ..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603909357342" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">通过srcset使用响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>3 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="devicepixelratio-像素设备比">devicePixelRatio 像素设备比</h2>
 <p>devicePixelRatio = 物理像素数量 / dips</p>
 <p>dips 是 设备独立像素，可以理解为 css 的逻辑像素，可以通过 srceen.width * screen.height 或者 document.documentElement.clientWidth * document.documentElement.clientHeight 获取</p>
 <p>在 IOS 上 一般值为 1 或 2 。(但是IPhoneX貌似为3)<br>
@@ -39,12 +12,51 @@ devicePixelRatio 仍然为 2，而不是1.5。</p>
 达到在不同设备上使用不同大小图片的效果，以节省带宽以及流量，获得更好地体验<br>
 <img src="https://czh.im/post-images/1603902659467.png" alt="" loading="lazy"><br>
 一般会配合 媒体查询 使用，因为在移动端的 retina 屏幕上，devicePixelRatio 也是2。</p>
+<h2 id="w-描述符">w 描述符</h2>
+<p>w 描述符前的数字代表浏览器提供多少物理像素来渲染图片，而 sizes 属性的值代表图片的逻辑像素大小。<br>
+最后计算的结果为 w / sizes = deviceDensity 得到了 像素密度。<br>
+这个像素密度就用来计算图片一个逻辑像素包含了多少物理像素。</p>
+<p>像素密度的概念和像素设备比的概念其实是相同的，只不过像素密度是专注于局部的元素，而像素设备比是专注于浏览器全局。<br>
+最后浏览器会用计算出来的像素密度和 window.divicePixelRatio 作比较，只有大于 window.devicePixelRatio 的规则，才会被使用。</p>
+<h2 id="利用w描述符实现不同宽度设备加载不同图片">利用w描述符实现不同宽度设备加载不同图片</h2>
+<pre><code class="language-html">    &lt;img src=&quot;./tiny-WechatIMG6.jpeg&quot; srcset=&quot;./tiny-WechatIMG6.jpeg 500w, ./WechatIMG6.jpeg 1000w&quot; sizes=&quot;500px&quot; width=&quot;500&quot;/&gt;
+</code></pre>
+<p>在  devicePixelRatio 为 1 的时候 会使用 tiny-WechatIMG6.jpeg<br>
+在  devicePixelRatio 为 2 的时候 会使用 tiny-WechatIMG6.jpeg</p>
+<p>而另一种情况</p>
+<pre><code class="language-html">   &lt;img src=&quot;./tiny-WechatIMG6.jpeg&quot; srcset=&quot;./tiny-WechatIMG6.jpeg 2000w, ./WechatIMG6.jpeg 3000w&quot; sizes=&quot;1000px&quot; width=&quot;500&quot;/&gt;
+</code></pre>
+<p>浏览器会将两张图片都加载，因为 两个像素密度都大于了 devicePixelRatio</p>
+<h2 id="利用w描述符实现响应式图片">利用w描述符实现响应式图片</h2>
+<pre><code class="language-js">/*
+   响应式图片 利用 w 描述符 来计算像素密度
+   设 img 中 sizes 规定的大小为 资源大小
+   设 img 中 w 描述符 规定的大小为 描述大小
+   计算过程为 描述大小 / 资源大小
+   计算结果为 像素密度 也就是 x描述符的值
+
+   假设该图片大小为 5068，资源大小默认为 窗口宽度(821)，指定为窗口宽度是为了让图片宽度等同于屏幕宽度
+   计算结果约为 6.172，也就是一个逻辑像素需要6.172个物理像素来熏染
+
+*/
+function loadResponsiveImage(src, sizes) {
+  const img = new Image();
+
+  img.src = src;
+  img.srcset = `${src} ${img.naturalWidth}w`;
+  img.sizes = sizes + 'px';
+  document.getElementById('responsiveBox').appendChild(img);
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
 </div><div class="toc-container"><ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%88%A9%E7%94%A8w%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9B%BE%E7%89%87">利用w描述符实现响应式图片</a></li>
 <li><a href="#devicepixelratio-%E5%83%8F%E7%B4%A0%E8%AE%BE%E5%A4%87%E6%AF%94">devicePixelRatio 像素设备比</a></li>
 <li><a href="#%E5%AE%9E%E7%8E%B0%E4%B8%8D%E5%90%8C%E5%88%86%E8%BE%A8%E7%8E%87%E7%9A%84%E6%83%85%E6%99%AF%E4%B8%8B%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9B%BE%E7%89%87">实现不同分辨率的情景下使用不同的图片</a></li>
+<li><a href="#w-%E6%8F%8F%E8%BF%B0%E7%AC%A6">w 描述符</a></li>
+<li><a href="#%E5%88%A9%E7%94%A8w%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%AE%9E%E7%8E%B0%E4%B8%8D%E5%90%8C%E5%AE%BD%E5%BA%A6%E8%AE%BE%E5%A4%87%E5%8A%A0%E8%BD%BD%E4%B8%8D%E5%90%8C%E5%9B%BE%E7%89%87">利用w描述符实现不同宽度设备加载不同图片</a></li>
+<li><a href="#%E5%88%A9%E7%94%A8w%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9B%BE%E7%89%87">利用w描述符实现响应式图片</a></li>
 </ul>
 </li>
 </ul>

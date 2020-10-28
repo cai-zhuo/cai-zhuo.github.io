@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-10-28T17:46:47.647Z</updated>
+    <updated>2020-10-28T18:22:43.328Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -16,30 +16,7 @@
         <link href="https://czh.im/post/xiang-ying-shi-tu-pian/">
         </link>
         <updated>2020-10-27T15:01:44.000Z</updated>
-        <content type="html"><![CDATA[<p>TODO : 这个w描述符到底咋回事</p>
-<h2 id="利用w描述符实现响应式图片">利用w描述符实现响应式图片</h2>
-<pre><code class="language-js">/*
-   响应式图片 利用 w 描述符 来计算像素密度
-   设 img 中 sizes 规定的大小为 资源大小
-   设 img 中 w 描述符 规定的大小为 描述大小
-   计算过程为 描述大小 / 资源大小
-   计算结果为 像素密度 也就是 x描述符的值
-
-   假设该图片大小为 5068，资源大小默认为 窗口宽度(821)
-   计算结果约为 6.172
-   也就是等同于 srcset=&quot;./WechatIMG6.jpeg 6.172x&quot;
-*/
-function loadResponsiveImage(src, sizes) {
-  const img = new Image();
-
-  img.src = src;
-  img.srcset = `${src} ${img.naturalWidth}w`;
-  img.sizes = sizes + 'px';
-  document.getElementById('responsiveBox').appendChild(img);
-}
-</code></pre>
-<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
-<h2 id="devicepixelratio-像素设备比">devicePixelRatio 像素设备比</h2>
+        <content type="html"><![CDATA[<h2 id="devicepixelratio-像素设备比">devicePixelRatio 像素设备比</h2>
 <p>devicePixelRatio = 物理像素数量 / dips</p>
 <p>dips 是 设备独立像素，可以理解为 css 的逻辑像素，可以通过 srceen.width * screen.height 或者 document.documentElement.clientWidth * document.documentElement.clientHeight 获取</p>
 <p>在 IOS 上 一般值为 1 或 2 。(但是IPhoneX貌似为3)<br>
@@ -51,6 +28,43 @@ devicePixelRatio 仍然为 2，而不是1.5。</p>
 达到在不同设备上使用不同大小图片的效果，以节省带宽以及流量，获得更好地体验<br>
 <img src="https://czh.im/post-images/1603902659467.png" alt="" loading="lazy"><br>
 一般会配合 媒体查询 使用，因为在移动端的 retina 屏幕上，devicePixelRatio 也是2。</p>
+<h2 id="w-描述符">w 描述符</h2>
+<p>w 描述符前的数字代表浏览器提供多少物理像素来渲染图片，而 sizes 属性的值代表图片的逻辑像素大小。<br>
+最后计算的结果为 w / sizes = deviceDensity 得到了 像素密度。<br>
+这个像素密度就用来计算图片一个逻辑像素包含了多少物理像素。</p>
+<p>像素密度的概念和像素设备比的概念其实是相同的，只不过像素密度是专注于局部的元素，而像素设备比是专注于浏览器全局。<br>
+最后浏览器会用计算出来的像素密度和 window.divicePixelRatio 作比较，只有大于 window.devicePixelRatio 的规则，才会被使用。</p>
+<h2 id="利用w描述符实现不同宽度设备加载不同图片">利用w描述符实现不同宽度设备加载不同图片</h2>
+<pre><code class="language-html">    &lt;img src=&quot;./tiny-WechatIMG6.jpeg&quot; srcset=&quot;./tiny-WechatIMG6.jpeg 500w, ./WechatIMG6.jpeg 1000w&quot; sizes=&quot;500px&quot; width=&quot;500&quot;/&gt;
+</code></pre>
+<p>在  devicePixelRatio 为 1 的时候 会使用 tiny-WechatIMG6.jpeg<br>
+在  devicePixelRatio 为 2 的时候 会使用 tiny-WechatIMG6.jpeg</p>
+<p>而另一种情况</p>
+<pre><code class="language-html">   &lt;img src=&quot;./tiny-WechatIMG6.jpeg&quot; srcset=&quot;./tiny-WechatIMG6.jpeg 2000w, ./WechatIMG6.jpeg 3000w&quot; sizes=&quot;1000px&quot; width=&quot;500&quot;/&gt;
+</code></pre>
+<p>浏览器会将两张图片都加载，因为 两个像素密度都大于了 devicePixelRatio</p>
+<h2 id="利用w描述符实现响应式图片">利用w描述符实现响应式图片</h2>
+<pre><code class="language-js">/*
+   响应式图片 利用 w 描述符 来计算像素密度
+   设 img 中 sizes 规定的大小为 资源大小
+   设 img 中 w 描述符 规定的大小为 描述大小
+   计算过程为 描述大小 / 资源大小
+   计算结果为 像素密度 也就是 x描述符的值
+
+   假设该图片大小为 5068，资源大小默认为 窗口宽度(821)，指定为窗口宽度是为了让图片宽度等同于屏幕宽度
+   计算结果约为 6.172，也就是一个逻辑像素需要6.172个物理像素来熏染
+
+*/
+function loadResponsiveImage(src, sizes) {
+  const img = new Image();
+
+  img.src = src;
+  img.srcset = `${src} ${img.naturalWidth}w`;
+  img.sizes = sizes + 'px';
+  document.getElementById('responsiveBox').appendChild(img);
+}
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
