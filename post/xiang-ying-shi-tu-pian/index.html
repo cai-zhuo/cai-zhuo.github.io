@@ -1,9 +1,9 @@
-<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603847634335"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="利用srcset 属性对 图片进行缩放
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>通过srcset使用响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603902676033"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="通过srcset使用响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="利用srcset 属性对 图片进行缩放
 function loadCustomScaleImage(src, density) {
   const img = new Image();
 
   img.src = src;
-  // 原本图片..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603847634335" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>1 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
+  // 原本图片..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603902676033" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">通过srcset使用响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
 <pre><code class="language-js">function loadCustomScaleImage(src, density) {
   const img = new Image();
 
@@ -31,12 +31,15 @@ function loadResponsiveImage(src, sizes) {
   const img = new Image();
 
   img.src = src;
-  img.srcset = `${src} ${img.naturalWidth * shrink}w`;
+  img.srcset = `${src} ${img.naturalWidth}w`;
   img.sizes = sizes + 'px';
   document.getElementById('responsiveBox').appendChild(img);
 }
 </code></pre>
 <figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
+<p>srcset 属性可以用来在不同分辨率设备上使用不同图片<br>
+达到在不同设备上使用不同大小图片的效果，以节省带宽以及流量，获得更好地体验<br>
+<img src="https://czh.im/post-images/1603902659467.png" alt="" loading="lazy"></p>
 </div><div class="toc-container"><ul class="markdownIt-TOC">
 <li>
 <ul>

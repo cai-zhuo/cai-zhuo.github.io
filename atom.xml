@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-10-28T01:14:02.258Z</updated>
+    <updated>2020-10-28T16:31:21.194Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://czh.im/favicon.ico</icon>
     <rights>All rights reserved 2020, CZh.IM</rights>
     <entry>
-        <title type="html"><![CDATA[响应式图片]]></title>
+        <title type="html"><![CDATA[通过srcset使用响应式图片]]></title>
         <id>https://czh.im/post/xiang-ying-shi-tu-pian/</id>
         <link href="https://czh.im/post/xiang-ying-shi-tu-pian/">
         </link>
@@ -44,12 +44,15 @@ function loadResponsiveImage(src, sizes) {
   const img = new Image();
 
   img.src = src;
-  img.srcset = `${src} ${img.naturalWidth * shrink}w`;
+  img.srcset = `${src} ${img.naturalWidth}w`;
   img.sizes = sizes + 'px';
   document.getElementById('responsiveBox').appendChild(img);
 }
 </code></pre>
 <figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
+<p>srcset 属性可以用来在不同分辨率设备上使用不同图片<br>
+达到在不同设备上使用不同大小图片的效果，以节省带宽以及流量，获得更好地体验<br>
+<img src="https://czh.im/post-images/1603902659467.png" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
