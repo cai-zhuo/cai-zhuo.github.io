@@ -1,9 +1,9 @@
-<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603811194261"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="利用srcset 属性对 图片进行缩放
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603847634335"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="利用srcset 属性对 图片进行缩放
 function loadCustomScaleImage(src, density) {
   const img = new Image();
 
   img.src = src;
-  // 原本图片..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603811194261" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>1 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
+  // 原本图片..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603847634335" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>1 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
 <pre><code class="language-js">function loadCustomScaleImage(src, density) {
   const img = new Image();
 
@@ -18,12 +18,12 @@ function loadCustomScaleImage(src, density) {
 <h2 id="响应式图片">响应式图片</h2>
 <pre><code class="language-js">/*
    响应式图片 利用 w 描述符 来计算像素密度
-   设 img 中 sizes 规定的大小为 源大小
+   设 img 中 sizes 规定的大小为 资源大小
    设 img 中 w 描述符 规定的大小为 描述大小
-   计算过程为 描述大小 / 源大小
+   计算过程为 描述大小 / 资源大小
    计算结果为 像素密度 也就是 x描述符的值
 
-   假设该图片大小为 5068，源大小默认为 窗口宽度(821)
+   假设该图片大小为 5068，资源大小默认为 窗口宽度(821)
    计算结果约为 6.172
    也就是等同于 srcset=&quot;./WechatIMG6.jpeg 6.172x&quot;
 */
