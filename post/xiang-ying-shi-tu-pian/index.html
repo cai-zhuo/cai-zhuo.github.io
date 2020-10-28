@@ -1,21 +1,11 @@
-<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>通过srcset使用响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603905446352"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="通过srcset使用响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="利用srcset 属性对 图片进行缩放
-function loadCustomScaleImage(src, density) {
-  const img = new Image();
-
-  img.src = src;
-  // 原本图片..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603905446352" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">通过srcset使用响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><h2 id="利用srcset-属性对-图片进行缩放">利用srcset 属性对 图片进行缩放</h2>
-<pre><code class="language-js">function loadCustomScaleImage(src, density) {
-  const img = new Image();
-
-  img.src = src;
-  // 原本图片大小的x倍像素密度，一个屏幕像素占据图片的x个像素
-  // 等同于 srcset=&quot;./WechatIMG6.jpeg ${density}x&quot;
-  img.srcset = `${src} ${density}x`;
-
-  document.getElementById('scaleBox').appendChild(img);
-}
-</code></pre>
-<h2 id="响应式图片">响应式图片</h2>
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>通过srcset使用响应式图片 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1603907204810"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="通过srcset使用响应式图片 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="TODO : 这个w描述符到底咋回事
+利用w描述符实现响应式图片
+/*
+   响应式图片 利用 w 描述符 来计算像素密度
+   设 img 中 sizes 规定的大小为 资源大小
+   设 img 中 w 描述符 规定的大小为 描述大小
+..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1603907204810" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title">通过srcset使用响应式图片</h2><div class="post-info"><span>2020-10-27</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><p>TODO : 这个w描述符到底咋回事</p>
+<h2 id="利用w描述符实现响应式图片">利用w描述符实现响应式图片</h2>
 <pre><code class="language-js">/*
    响应式图片 利用 w 描述符 来计算像素密度
    设 img 中 sizes 规定的大小为 资源大小
@@ -37,14 +27,24 @@ function loadResponsiveImage(src, sizes) {
 }
 </code></pre>
 <figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
+<h2 id="devicepixelratio-像素设备比">devicePixelRatio 像素设备比</h2>
+<p>devicePixelRatio = 物理像素数量 / dips</p>
+<p>dips 是 设备独立像素，可以理解为 css 的逻辑像素，可以通过 srceen.width * screen.height 或者 document.documentElement.clientWidth * document.documentElement.clientHeight 获取</p>
+<p>在 IOS 上 一般值为 1 或 2 。(但是IPhoneX貌似为3)<br>
+假设 dips 为 1400x900 。即使 在 retina-mac 上更改了分辨率，由 2800 * 1800 改为 1920x120。<br>
+devicePixelRatio 仍然为 2，而不是1.5。</p>
+<p>在 Android 上，由于不同浏览器厂商有不同的策略，可以直接按公式来计算。</p>
+<h2 id="实现不同分辨率的情景下使用不同的图片">实现不同分辨率的情景下使用不同的图片</h2>
 <p>srcset 属性可以用来在不同分辨率设备上使用不同图片<br>
-达到在不同设备上使用不同大小图片的效果，以节省带宽以及流量，获得更好地体验</p>
-<figure data-type="image" tabindex="2"><img src="https://czh.im/post-images/1603902659467.png" alt="" loading="lazy"></figure>
+达到在不同设备上使用不同大小图片的效果，以节省带宽以及流量，获得更好地体验<br>
+<img src="https://czh.im/post-images/1603902659467.png" alt="" loading="lazy"><br>
+一般会配合 媒体查询 使用，因为在移动端的 retina 屏幕上，devicePixelRatio 也是2。</p>
 </div><div class="toc-container"><ul class="markdownIt-TOC">
 <li>
 <ul>
-<li><a href="#%E5%88%A9%E7%94%A8srcset-%E5%B1%9E%E6%80%A7%E5%AF%B9-%E5%9B%BE%E7%89%87%E8%BF%9B%E8%A1%8C%E7%BC%A9%E6%94%BE">利用srcset 属性对 图片进行缩放</a></li>
-<li><a href="#%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9B%BE%E7%89%87">响应式图片</a></li>
+<li><a href="#%E5%88%A9%E7%94%A8w%E6%8F%8F%E8%BF%B0%E7%AC%A6%E5%AE%9E%E7%8E%B0%E5%93%8D%E5%BA%94%E5%BC%8F%E5%9B%BE%E7%89%87">利用w描述符实现响应式图片</a></li>
+<li><a href="#devicepixelratio-%E5%83%8F%E7%B4%A0%E8%AE%BE%E5%A4%87%E6%AF%94">devicePixelRatio 像素设备比</a></li>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E4%B8%8D%E5%90%8C%E5%88%86%E8%BE%A8%E7%8E%87%E7%9A%84%E6%83%85%E6%99%AF%E4%B8%8B%E4%BD%BF%E7%94%A8%E4%B8%8D%E5%90%8C%E7%9A%84%E5%9B%BE%E7%89%87">实现不同分辨率的情景下使用不同的图片</a></li>
 </ul>
 </li>
 </ul>
