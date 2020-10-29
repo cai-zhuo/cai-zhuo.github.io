@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://czh.im</id>
     <title>CZh.IM</title>
-    <updated>2020-10-28T18:22:43.328Z</updated>
+    <updated>2020-10-29T02:58:23.209Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://czh.im"/>
     <link rel="self" href="https://czh.im/atom.xml"/>
@@ -11,7 +11,39 @@
     <icon>https://czh.im/favicon.ico</icon>
     <rights>All rights reserved 2020, CZh.IM</rights>
     <entry>
-        <title type="html"><![CDATA[通过srcset使用响应式图片]]></title>
+        <title type="html"><![CDATA[对图片进行转码（DataURL）]]></title>
+        <id>https://czh.im/post/dui-tu-pian-jin-xing-zhuan-ma-dataurl/</id>
+        <link href="https://czh.im/post/dui-tu-pian-jin-xing-zhuan-ma-dataurl/">
+        </link>
+        <updated>2020-10-29T02:48:34.000Z</updated>
+        <content type="html"><![CDATA[<p>对图片进行转码，是一种常见的操作，用来减少应用加载过程中，网络请求的数量。</p>
+<pre><code class="language-html">&lt;img src=&quot;data:image/svg+xml;base64,[data]&quot;&gt;
+</code></pre>
+<p>在 src 所指定的字符串中，是一段 base64 编码的字符串。我们称这一段字符串为 DataURL</p>
+<ul>
+<li>优点
+<ol>
+<li>减少HTTP请求</li>
+<li>cpu的计算速度 要快于 网络请求的速度</li>
+</ol>
+</li>
+<li>缺点
+<ol>
+<li>与来自外部 <code>src</code> 的图像相比，在移动设备上 Data URI 格式图像的显示速度要<a href="https://www.mobify.com/blog/data-uris-are-slow-on-mobile/">慢得多</a>。</li>
+<li>Data URI 会显著增加 HTML 请求的大小。</li>
+<li>Data URI 会增加HTML标记和工作流的复杂性。</li>
+<li>Data URI 格式的图像比二进制格式的图像大很多（最多大 <strong>30%</strong>），因此不会减小总下载大小。</li>
+<li>Data URI 无法缓存，因此必须为使用它们的每一个页面分别进行下载。</li>
+<li>IE 6 和 7 不支持 Data URI，IE8 仅提供有限支持。</li>
+<li>对于 HTTP/2，减少请求的次数并不是优化网络的优先策略。</li>
+</ol>
+</li>
+</ul>
+<p>所以对图片的转码还应视情景而定。可以对小图片进行转码，比如在webpack的 url-loader 中，经常会对小于10kb的图片进行DataURL转码，来减少网络请求。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[响应式图片]]></title>
         <id>https://czh.im/post/xiang-ying-shi-tu-pian/</id>
         <link href="https://czh.im/post/xiang-ying-shi-tu-pian/">
         </link>
@@ -65,6 +97,9 @@ function loadResponsiveImage(src, sizes) {
 }
 </code></pre>
 <figure data-type="image" tabindex="1"><img src="https://czh.im/post-images/1603811012740.png" alt="" loading="lazy"></figure>
+<h2 id="svg">SVG</h2>
+<p>当想使用响应式图片的时候，可以使用SVG来达到相同的效果，在移动端设备和桌面设备上SVG同样有很好的支持。<br>
+对SVG可以进行压缩，使用 <a href="https://sarasoueidan.com/blog/svgo-tools/">优化工具</a> 可以显著减少SVG图片的大小</p>
 ]]></content>
     </entry>
     <entry>
@@ -702,204 +737,6 @@ const router = (()=&gt;{
     return new Router()
 }())
 </code></pre>
-</li>
-</ol>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[HTTP入门]]></title>
-        <id>https://czh.im/post/http-ru-men/</id>
-        <link href="https://czh.im/post/http-ru-men/">
-        </link>
-        <updated>2020-04-04T04:47:53.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="http-基本知识">HTTP 基本知识</h2>
-<ol>
-<li>
-<p>http，超文本传输协议</p>
-<p>在计算机网络中，<strong>两点</strong>之间<strong>传输</strong>文字，图片，视频等<strong>超文本</strong>数据的<strong>约定和规范</strong></p>
-</li>
-<li>
-<p>五大类HTTP状态码</p>
-<p><strong>1xx</strong>,提示信息，协议处理中的一种中间状态</p>
-<p><strong>2xx</strong>,成功处理了请求</p>
-<p><strong>3xx</strong>,请求的资源发生了变动，也就是重定向，也用于控制缓存（304 资源未修改）</p>
-<p><strong>4xx</strong>,报文有误，服务端无法处理</p>
-<p><strong>5xx</strong>，报文正确，服务端错误</p>
-</li>
-<li>
-<p>常见的 HTTP字段</p>
-<p>Host     发送请求时，指定服务器的域名</p>
-<p>Content-Length  响应数据的长度，超过这个长度，就属于下一个请求了</p>
-<p>Connection    	 表示长久连接，为了兼容老版本HTTP，值为Keep-Alive（默认）</p>
-<p>Content-Type      表示响应数据的格式（text/html;charset=utf-8）</p>
-<p>Accept                  表示请求接受的数据格式</p>
-<p>Content-Encoding     说明数据的压缩方法</p>
-<p>Accept-Encoding		希望数据的压缩方法（gzip，deflate）</p>
-</li>
-</ol>
-<h2 id="get和post">GET和POST</h2>
-<ul>
-<li>
-<p>GET 表示获取资源</p>
-<p>安全且幂等</p>
-</li>
-<li>
-<p>POST 表示提交数据</p>
-<p>不安全，不幂等</p>
-</li>
-<li>
-<p>安全</p>
-<p>请求不会破坏服务器上的资源</p>
-</li>
-<li>
-<p>幂等</p>
-<p>多次请求，结果相同</p>
-</li>
-</ul>
-<h2 id="http特性">HTTP特性</h2>
-<ol>
-<li>
-<p>简单</p>
-<p>报文格式简单：head+body</p>
-</li>
-<li>
-<p>灵活易拓展</p>
-<p>各类请求方法，URI/URL，状态码，头字段，都没有被固定死，允许开发人员自行扩充</p>
-<p>同时  HTTP  工作在应用层，下层可以随意变化，比如 HTTPS 就是在HTTP和TCP之间加入了SSL/TLS安全传输层，HTTP3甚至把TCP换成了基于UDP的QUIC</p>
-</li>
-<li>
-<p>应用广泛和跨平台</p>
-</li>
-<li>
-<p>无状态</p>
-<ul>
-<li>导致了业务逻辑复杂</li>
-<li>减轻服务器压力</li>
-</ul>
-</li>
-<li>
-<p>明文传输</p>
-<ul>
-<li>调试方便</li>
-<li>不安全</li>
-</ul>
-</li>
-<li>
-<p>不安全</p>
-<ul>
-<li>通信使用明文</li>
-<li>不验证通信方身份</li>
-<li>不验证报文完整性</li>
-</ul>
-</li>
-</ol>
-<h2 id="http性能">HTTP性能</h2>
-<ol>
-<li>
-<p>长连接</p>
-<p>由于每次tcp的连接断开都需要三次握手和四次挥手，所以反复的连接和断开会造成性能的损耗</p>
-<p>于是采用长连接的策略</p>
-</li>
-<li>
-<p>管道网络传输</p>
-<p>不必等待第一个请求响应完成，即可发出第二个请求，减少了整体的响应时间，但目前为止，服务端仍然是按顺序依次响应。</p>
-</li>
-<li>
-<p>队头阻塞</p>
-<p>当一个请求被阻塞，会导致后续的请求同样被阻塞</p>
-</li>
-</ol>
-<h2 id="http-与-https">HTTP 与 HTTPS</h2>
-<h3 id="https-特点">HTTPS 特点</h3>
-<ul>
-<li>在HTTP的基础上，加入了 SSL/TSL协议。</li>
-<li>在TCP三次握手的基础上，进行SSL/TSL的四次握手过程，才进入加密报文传输过程。</li>
-<li>HTTP的端口号是80，HTTPS的端口号是443</li>
-<li>HTTPS需要向CA申请数字证书，来保证服务器自身是可信的</li>
-</ul>
-<h3 id="https-解决的问题">HTTPS 解决的问题</h3>
-<ul>
-<li>
-<p>窃听风险（信息加密）----混合加密</p>
-</li>
-<li>
-<p>篡改风险（完整性验证）----摘要算法</p>
-</li>
-<li>
-<p>冒充风险（身份验证） --- 数字证书</p>
-</li>
-</ul>
-<h2 id="过程">过程</h2>
-<p>​	在进行TCP的三次握手之后，进行SSL的四次握手，双方交换信息以及随机数，获取服务端的证书，以及加密过后的随机数（pre-master key），通过pre-master来生成会话密钥，之后一直采用会话密钥进行加密</p>
-<h2 id="演变">演变</h2>
-<ol>
-<li>
-<p>HTTP</p>
-<p>1.1 相比1.0 的改进</p>
-<ul>
-<li>增加了 PUT，DELETE 等新的方法</li>
-<li>增加了缓存管理和控制</li>
-<li>明确了连接管理，允许持久连接</li>
-<li>允许响应数据分块，利于大文件传输</li>
-<li>强制要求Host头，使得互联网主机托管成为可能</li>
-<li>管道网络传输</li>
-</ul>
-<p>性能瓶颈</p>
-<ul>
-<li>响应头部未压缩就发送，首部信息越多延迟越大</li>
-<li>发送冗长的信息，每次互相发送相同的消息会造成浪费</li>
-<li>队头阻塞</li>
-<li>没有优先级控制</li>
-<li>只能从客户端请求，服务端响应</li>
-</ul>
-</li>
-<li>
-<p>HTTP/2</p>
-<p>相比 1.1 的改进</p>
-<ul>
-<li>
-<p>头部压缩</p>
-</li>
-<li>
-<p>HPACK,客户端和服务端同时维护一张头部信息表，发送请求只需要发送索引号即可</p>
-</li>
-<li>
-<p>二进制格式，头部和数据体统称为帧：头信息帧和数据帧。</p>
-<p>增加了数据传输的效率</p>
-</li>
-<li>
-<p>数据流<br>
-一次长连接里面连续的数据包可能属于不同的响应，可以指定数据流的优先级</p>
-</li>
-<li>
-<p>多路复用 ，废弃管道<br>
-一次连接中可以<strong>并发</strong>多个请求或响应，不会出现<strong>对头阻塞</strong>问题，降低了延迟，提高了利用率<br>
-服务器推送   主动向客户端发送消息</p>
-</li>
-<li>
-<p>增强了安全行， 要求加密通信</p>
-</li>
-</ul>
-<p>缺陷</p>
-<ul>
-<li>
-<p>由于多个HTTP请求复用一个TCP连接，一旦发生丢包现象，就会触发TCP的重传机制。所有请求都等待丢了的包重传回来。</p>
-<p>HTTP/1.1 ，一个请求阻塞，后续的请求也会阻塞</p>
-<p>HTTP/2   一个请求丢包，会阻塞所有请求</p>
-<p>原因是基于TCP的传输层</p>
-</li>
-</ul>
-</li>
-<li>
-<p>HTTP/3</p>
-<ul>
-<li>
-<p>改进</p>
-<p>将TCP协议换成UDP协议，并使用QUIC协议来实现类似TCP的可靠传输</p>
-<p>最终使得，某个流发生丢包，只会阻塞当前流，不会阻塞其他数据流</p>
-<p>并且将TCP的三次握手和TLS1.3+的三次握手合并为三次</p>
-</li>
-</ul>
 </li>
 </ol>
 ]]></content>
