@@ -1,0 +1,102 @@
+<html><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title># Async 异步函数书写习惯 | CZh.IM</title><link rel="shortcut icon" href="https://czh.im/favicon.ico?v=1604033190389"><!-- <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">--><link rel="stylesheet" href="https://czh.im/styles/main.css"><link rel="alternate" type="application/atom+xml" title="# Async 异步函数书写习惯 | CZh.IM - Atom Feed" href="https://czh.im/atom.xml"><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700"><meta name="description" content="原理不做解释，请查文档
+平时 async，await 的书写习惯的不同，会导致任务的表现不同
+// 两个计时函数之间是阻塞的
+async function syncWait() {
+  console.time('阻塞执行 syncWait..." /><meta name="keywords" content="" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css"><script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script></head><body><div class="main"><div class="main-content"><div class="site-header"><a href="https://czh.im"><img class="avatar" src="https://czh.im/images/avatar.png?v=1604033190389" alt=""></a><h1 class="site-title">CZh.IM</h1><p class="site-description">watching myself</p><div class="menu-container"><a href="/" class="menu">首页</a><a href="/archives" class="menu">笔记</a><a href="/tags" class="menu">标签</a><a href="https://github.com/c739557637" class="menu" target="_blank">github</a></div><div class="social-container"></div><div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div></div><div class="post-detail"><article class="post"><h2 class="post-title"># Async 异步函数书写习惯</h2><div class="post-info"><span>2020-10-30</span><span>2 min read</span></div><div class="post-content-wrapper"><div class="post-content"><p>原理不做解释，请查文档</p>
+<p>平时 async，await 的书写习惯的不同，会导致任务的表现不同</p>
+<pre><code class="language-js">// 两个计时函数之间是阻塞的
+async function syncWait() {
+  console.time('阻塞执行 syncWait');
+
+  await wait(500);
+  await wait(500);
+
+  console.timeEnd('阻塞执行 syncWait');
+}
+
+// 两个计时函数之间是非阻塞的
+async function asyncWait() {
+  console.time('非阻塞执行 asyncWait');
+  
+  const timeout1 = wait(500);
+  const timeout2 = wait(500);
+
+  await timeout1;
+  await timeout2;
+
+  console.timeEnd('非阻塞执行 asyncWait');
+}
+
+async function wait(time) {
+  return new Promise((resolve) =&gt; {
+    setTimeout(() =&gt; {
+      resolve('timeout');
+    }, time);
+  });
+}
+
+syncWait();
+asyncWait();
+
+</code></pre>
+<blockquote>
+<p>非阻塞执行 asyncWait: 505.733ms</p>
+<p>阻塞执行 syncWait: 1011.382ms</p>
+</blockquote>
+<p>当有多个异步操作的情景下，书写习惯习惯是这样的</p>
+<pre><code class="language-js">async function multiAsyncOpt(){
+  const { data:info } = await api.get('/getInfo');
+  const { data:detail } = await api.get('/getDetail');
+  return [info,detail];
+}
+</code></pre>
+<p>但是这样书写，multiAsyncOpt 的花费总时长是两个异步函数时长的总和，即</p>
+<blockquote>
+<p>time( multiAsyncOpt ) = time( getInfo ) + time( getDetail )</p>
+</blockquote>
+<p>所以我们可以这样书写</p>
+<pre><code class="language-js">async function multiAsyncOpt(){
+	const getInfo = api.get('/getInfo');  
+  const getDetail = api.get('/getDetail');
+  
+  const { data:info } = await getInfo;
+  const { data:detail } = await getDetail;
+  
+  return [info,detail]
+}
+</code></pre>
+</div><div class="toc-container"></div></div></article><div class="next-post"><div class="next">下一篇</div><a href="https://czh.im/post/dui-tu-pian-jin-xing-zhuan-ma-dataurl/"><h3 class="post-title">对图片进行转码（DataURL）</h3></a></div></div><!-- <div class="site-footer">Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a><a class="rss" href="https://czh.im/atom.xml" target="_blank"><i class="ri-rss-line"></i>RSS</a></div> --></div></div><script>
+        hljs.initHighlightingOnLoad()
+        let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+        // This should probably be throttled.
+        // Especially because it triggers during smooth scrolling.
+        // https://lodash.com/docs/4.17.10#throttle
+        // You could do like...
+        // window.addEventListener("scroll", () => {
+        //    _.throttle(doThatStuff, 100);
+        // });
+        // Only not doing it here to keep this Pen dependency-free.
+        window.addEventListener("scroll", event => {
+            let fromTop = window.scrollY;
+            mainNavLinks.forEach((link, index) => {
+                let section = document.getElementById(decodeURI(link.hash).substring(1));
+                let nextSection = null
+                if (mainNavLinks[index + 1]) {
+                    nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+                }
+                if (section.offsetTop <= fromTop) {
+                    if (nextSection) {
+                        if (nextSection.offsetTop > fromTop) {
+                            link.classList.add("current");
+                        } else {
+                            link.classList.remove("current");
+                        }
+                    } else {
+                        link.classList.add("current");
+                    }
+                } else {
+                    link.classList.remove("current");
+                }
+            });
+        });
+    </script></body></html>
