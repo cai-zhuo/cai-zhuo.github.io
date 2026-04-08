@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What I've Built Recently · 我最近做了什么 — Cai Zhuo</title>
+  <meta name="description" content="Recent work by Cai Zhuo: Materials AI (a canvas AI for posters and design) and RPG World (a Vampire Survivors-like roguelike)." />
+  <meta name="author" content="Cai Zhuo" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="What I've Built Recently — Cai Zhuo" />
+  <meta property="og:description" content="Materials AI · RPG World — two recent projects." />
+  <meta property="og:url" content="https://cai-zhuo.github.io/" />
+
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- Web fonts used by the live-rendered good cases -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body data-lang="en">
+
+  <!-- ============================================================
+       Top bar
+       ============================================================ -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Language toggle">
+        <button type="button" data-lang-set="en" class="active">EN</button>
+        <button type="button" data-lang-set="zh">中</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       Hero
+       ============================================================ -->
+  <section class="hero">
+    <div class="container">
+      <h1 class="hero-headline">
+        <span class="en">What I've Been <span class="accent">Building</span></span>
+        <span class="zh">我最近<span class="accent">在做</span>什么</span>
+      </h1>
+      <p class="hero-tagline">
+        <span class="en">Two projects from the past few weeks — an AI canvas system for poster design, and a Vampire Survivors-like roguelike. Both are still moving.</span>
+        <span class="zh">最近几周的两个项目 —— 一个用于海报设计的 AI 画布系统，和一个类吸血鬼幸存者的 Roguelike。两个都还在推进中。</span>
+      </p>
+      <div class="hero-meta">
+        <span class="en">Last updated · 2026-04-08</span>
+        <span class="zh">最近更新 · 2026-04-08</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Materials AI section
+       ============================================================ -->
+  <section class="section" id="materials-ai">
+    <div class="container">
+      <span class="section-eyebrow">Project 01</span>
+      <h2 class="section-title">Materials AI</h2>
+      <p class="section-subtitle">
+        <span class="en">A canvas AI for shop &amp; e-commerce posters</span>
+        <span class="zh">面向店铺与电商海报的画布 AI</span>
+      </p>
+
+      <p class="section-description">
+        <span class="en">
+          Materials AI is a canvas-based AI design system. Its main target is shop posters and
+          e-commerce posters — but it can take on more than that. <strong>Graphic diagrams</strong> and
+          <strong>game 2D materials</strong> are still in the task list, in progress. So depending on
+          what you need, you can use the web app, the OpenClaw skill, or the npm package below to
+          build your canvas result.
+        </span>
+        <span class="zh">
+          Materials AI 是一个基于画布的 AI 设计系统。主要目标是店铺海报和电商海报 —— 但它能做的不止这些。
+          <strong>图形示意图</strong> 和 <strong>游戏 2D 素材</strong> 还在任务列表里，正在推进。
+          所以根据你的需求，你可以选择下面的网页应用、OpenClaw skill、或者 npm 包来构建你的画布结果。
+        </span>
+      </p>
+
+      <div class="tech-tags">
+        <span class="tech-tag">React 18</span>
+        <span class="tech-tag">Vite</span>
+        <span class="tech-tag">TypeScript</span>
+        <span class="tech-tag">Express</span>
+        <span class="tech-tag">Canvas</span>
+        <span class="tech-tag">AI Agents</span>
+        <span class="tech-tag">declare-render</span>
+        <span class="tech-tag">Vibe coding</span>
+      </div>
+
+      <!-- 3 access cards -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">How to try it</span>
+          <span class="zh">如何使用</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">three ways</span>
+          <span class="zh">三种方式</span>
+        </span>
+      </div>
+
+      <div class="access-grid">
+        <!-- Web app -->
+        <a class="access-card" href="https://canvas-workbench.onrender.com/" target="_blank" rel="noopener">
+          <span class="access-icon" aria-hidden="true">⌘</span>
+          <h4 class="access-title">
+            <span class="en">Web App</span>
+            <span class="zh">网页应用</span>
+          </h4>
+          <p class="access-body">
+            <span class="en">The full canvas editor in your browser — chat with the AI agent and iterate on designs interactively.</span>
+            <span class="zh">浏览器中的完整画布编辑器 —— 与 AI agent 对话，交互式地迭代你的设计。</span>
+          </p>
+          <span class="access-cta">
+            <span class="en">Open web app</span>
+            <span class="zh">打开网页应用</span>
+          </span>
+          <span class="access-note">canvas-workbench.onrender.com</span>
+        </a>
+
+        <!-- OpenClaw skill -->
+        <a class="access-card" href="https://clawhub.ai/cai-zhuo/materials-cli" target="_blank" rel="noopener">
+          <span class="access-icon" aria-hidden="true">⚡</span>
+          <h4 class="access-title">
+            <span class="en">OpenClaw Skill</span>
+            <span class="zh">OpenClaw Skill</span>
+          </h4>
+          <p class="access-body">
+            <span class="en">Use Materials AI as an OpenClaw skill — bring your own model API key and you're ready to go.</span>
+            <span class="zh">作为 OpenClaw skill 使用 —— 配置好你的模型 API key 即可使用。</span>
+          </p>
+          <span class="access-cta">
+            <span class="en">View on ClawHub</span>
+            <span class="zh">在 ClawHub 查看</span>
+          </span>
+          <span class="access-note">clawhub.ai/cai-zhuo/materials-cli</span>
+        </a>
+
+        <!-- npm package -->
+        <a class="access-card" href="https://www.npmjs.com/package/declare-render" target="_blank" rel="noopener">
+          <span class="access-icon" aria-hidden="true">{ }</span>
+          <h4 class="access-title">
+            <span class="en">npm · declare-render</span>
+            <span class="zh">npm · declare-render</span>
+          </h4>
+          <p class="access-body">
+            <span class="en">The underlying canvas engine. I wrote this <strong>before</strong> I adopted AI — it's the foundation Materials AI is built on.</span>
+            <span class="zh">底层的画布引擎。在我使用 AI 之前 <strong>就写好了</strong> —— Materials AI 就是基于它构建的。</span>
+          </p>
+          <span class="access-cta">
+            <span class="en">View on npm</span>
+            <span class="zh">在 npm 查看</span>
+          </span>
+          <span class="access-note">npmjs.com/package/declare-render</span>
+        </a>
+      </div>
+
+      <!-- Good cases -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">Good Cases</span>
+          <span class="zh">案例展示</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">posters generated by Materials AI</span>
+          <span class="zh">由 Materials AI 生成的海报</span>
+        </span>
+      </div>
+
+      <div class="cases-grid">
+        <!-- Featured: live rendered by declare-render from data/cases.js -->
+        <div class="case-featured" id="case-featured">
+          <div class="case-featured-header">
+            <span class="case-featured-tag">
+              <span class="en">Live render</span>
+              <span class="zh">实时渲染</span>
+            </span>
+            <span class="case-featured-title">
+              <span class="en">Coffee Shop poster · rendered by declare-render from JSON</span>
+              <span class="zh">Coffee Shop 海报 · 由 declare-render 从 JSON 渲染</span>
+            </span>
+          </div>
+          <div class="case-featured-status" id="case-featured-status">
+            <span class="en">Loading <code>declare-render</code>…</span>
+            <span class="zh">正在加载 <code>declare-render</code>……</span>
+          </div>
+        </div>
+
+        <!-- Second featured: floral spring -->
+        <div class="case-featured" id="case-featured-2">
+          <div class="case-featured-header">
+            <span class="case-featured-tag">
+              <span class="en">Live render</span>
+              <span class="zh">实时渲染</span>
+            </span>
+            <span class="case-featured-title">
+              <span class="en">Floral Spring poster · vertical CJK calligraphy from JSON</span>
+              <span class="zh">Floral Spring 海报 · 由 JSON 生成的中文竖排</span>
+            </span>
+          </div>
+          <div class="case-featured-status" id="case-featured-2-status">
+            <span class="en">Loading <code>declare-render</code>…</span>
+            <span class="zh">正在加载 <code>declare-render</code>……</span>
+          </div>
+        </div>
+        <div class="case-featured" id="case-featured-3">
+          <div class="case-featured-header">
+            <span class="case-featured-tag">
+              <span class="en">Live render</span>
+              <span class="zh">实时渲染</span>
+            </span>
+            <span class="case-featured-title">
+              <span class="en">Rosvine poster · Good case #3 from JSON</span>
+              <span class="zh">Rosvine 海报 · 案例 #3（JSON 实时渲染）</span>
+            </span>
+          </div>
+          <div class="case-featured-status" id="case-featured-3-status">
+            <span class="en">Loading <code>declare-render</code>…</span>
+            <span class="zh">正在加载 <code>declare-render</code>……</span>
+          </div>
+        </div>
+        <div class="case-featured" id="case-featured-4">
+          <div class="case-featured-header">
+            <span class="case-featured-tag">
+              <span class="en">Live render</span>
+              <span class="zh">实时渲染</span>
+            </span>
+            <span class="case-featured-title">
+              <span class="en">Manner Coffee poster v2 · Good case #4 from JSON</span>
+              <span class="zh">Manner Coffee 海报 v2 · 案例 #4（JSON 实时渲染）</span>
+            </span>
+          </div>
+          <div class="case-featured-status" id="case-featured-4-status">
+            <span class="en">Loading <code>declare-render</code>…</span>
+            <span class="zh">正在加载 <code>declare-render</code>……</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screenshots: webapp -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">Screenshots</span>
+          <span class="zh">截图</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">how the web app works</span>
+          <span class="zh">网页应用是如何工作的</span>
+        </span>
+      </div>
+
+      <div class="screenshot-grid">
+        <figure class="screenshot-card">
+          <img src="assets/materials-ai/editor.png" alt="Materials AI canvas editor showing a 1080×1920 floral poster with layer panel and JSON input" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Editor view</span>
+            <span class="zh">编辑器视图</span>
+          </figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="assets/materials-ai/good-cases.png" alt="Materials AI good cases gallery showing Rouge Collection, Chestnut Shop, and Coffee Shop poster templates" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Good cases gallery</span>
+            <span class="zh">案例库</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Project progress block -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">Project Progress</span>
+          <span class="zh">项目进度</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">where it's at</span>
+          <span class="zh">目前进展</span>
+        </span>
+      </div>
+
+      <div class="materials-progress">
+        <!-- Section 1: Canvas Agents -->
+        <div class="mp-section">
+          <div class="mp-section-header">
+            <span class="mp-num">1</span>
+            <span class="mp-title">
+              <span class="en">Canvas Agents</span>
+              <span class="zh">画布 Agents</span>
+            </span>
+            <span class="mp-status partial">
+              <span class="en">In Progress</span>
+              <span class="zh">进行中</span>
+            </span>
+          </div>
+          <div class="mp-items">
+            <div class="mp-item done">
+              <span class="mp-bullet">1.1</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Orchestrator</span>
+                  <span class="zh">编排器</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">Orchestrates tasks and guides the image generation flow.</span>
+                  <span class="zh">编排任务，引导图像生成流程。</span>
+                </div>
+              </div>
+              <span class="mp-tick done">✓</span>
+            </div>
+            <div class="mp-item done">
+              <span class="mp-bullet">1.2</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Image generation</span>
+                  <span class="zh">图像生成</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">Backgrounds and vibe materials. MiniMax and nanobanana available.</span>
+                  <span class="zh">背景图与氛围素材。已支持 MiniMax 与 nanobanana。</span>
+                </div>
+              </div>
+              <span class="mp-tick done">✓</span>
+            </div>
+            <div class="mp-item done">
+              <span class="mp-bullet">1.3</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Canvas agents</span>
+                  <span class="zh">画布 Agent</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">Stream-rendered content and shape design.</span>
+                  <span class="zh">流式渲染内容与形状设计。</span>
+                </div>
+              </div>
+              <span class="mp-tick done">✓</span>
+            </div>
+            <div class="mp-item todo">
+              <span class="mp-bullet">1.4</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Graphic diagrams &amp; 2D game materials</span>
+                  <span class="zh">图形示意图 &amp; 游戏 2D 素材</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">Extend the agent pipeline to generate flowcharts, mind maps, and game sprites.</span>
+                  <span class="zh">扩展 agent 流水线，生成流程图、思维导图、游戏精灵图。</span>
+                </div>
+              </div>
+              <span class="mp-tick todo">○</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: Canvas Editor -->
+        <div class="mp-section">
+          <div class="mp-section-header">
+            <span class="mp-num">2</span>
+            <span class="mp-title">
+              <span class="en">Canvas Editor</span>
+              <span class="zh">画布编辑器</span>
+            </span>
+            <span class="mp-status partial">
+              <span class="en">In Progress</span>
+              <span class="zh">进行中</span>
+            </span>
+          </div>
+          <div class="mp-items">
+            <div class="mp-item done">
+              <span class="mp-bullet">2.1</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Shape editing</span>
+                  <span class="zh">形状编辑</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">Circles, squares, ellipses — rotation and resizing.</span>
+                  <span class="zh">圆形、方形、椭圆等的旋转与缩放。</span>
+                </div>
+              </div>
+              <span class="mp-tick done">✓</span>
+            </div>
+            <div class="mp-item partial">
+              <span class="mp-bullet">2.2</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Text content editing</span>
+                  <span class="zh">文本编辑</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">Rotation, movement, content editing.</span>
+                  <span class="zh">旋转、移动、内容编辑。</span>
+                </div>
+                <div class="mp-pending">
+                  <span class="en">Pending: more fonts · more styles · highlights</span>
+                  <span class="zh">待办：更多字体 · 更多样式 · 高亮</span>
+                </div>
+              </div>
+              <span class="mp-tick partial">◐</span>
+            </div>
+            <div class="mp-item partial">
+              <span class="mp-bullet">2.3</span>
+              <div class="mp-body">
+                <div class="mp-name">
+                  <span class="en">Image editing</span>
+                  <span class="zh">图像编辑</span>
+                </div>
+                <div class="mp-desc">
+                  <span class="en">URL editing, rotation, resizing.</span>
+                  <span class="zh">URL 编辑、旋转、缩放。</span>
+                </div>
+                <div class="mp-pending">
+                  <span class="en">Pending: opacity · using REMOVE_BG model to remove bg</span>
+                  <span class="zh">待办：透明度 · 使用 REMOVE_BG 模型移除背景</span>
+                </div>
+              </div>
+              <span class="mp-tick partial">◐</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 3: Offline Printer -->
+        <div class="mp-section">
+          <div class="mp-section-header">
+            <span class="mp-num">3</span>
+            <span class="mp-title">
+              <span class="en">Offline Printer Setup</span>
+              <span class="zh">线下打印部署</span>
+            </span>
+            <span class="mp-status todo">
+              <span class="en">Planned</span>
+              <span class="zh">计划中</span>
+            </span>
+          </div>
+          <div class="mp-section-desc">
+            <span class="en">Set up offline printers and in-store print workflow so I can offer poster printing services directly to local shops.</span>
+            <span class="zh">搭建线下打印设备与门店打印流程，让我可以直接为本地商家提供海报打印服务。</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
+       RPG World section
+       ============================================================ -->
+  <section class="section" id="rpg-world">
+    <div class="container">
+      <span class="section-eyebrow">Project 02</span>
+      <h2 class="section-title">RPG World</h2>
+      <p class="section-subtitle">
+        <span class="en">A Vampire Survivors-like roguelike</span>
+        <span class="zh">一个类吸血鬼幸存者的 Roguelike</span>
+      </p>
+
+      <p class="section-description">
+        <span class="en">
+          Started as a copy of Vampire Survivors — I want to build my own game on top of this idea.
+          <strong>It's not done yet</strong>, but the core systems are in place: 94 weapons, 23 characters,
+          1000+ monsters, weapon evolution, level-up flow, shop, achievements, mobile touch controls.
+          The main remaining work is <strong>designing the game materials</strong> — sprites, art,
+          and assets that turn the systems into a game with its own identity. Testing is the other piece.
+        </span>
+        <span class="zh">
+          从复刻吸血鬼幸存者开始 —— 我想在这个基础上做出自己的游戏。
+          <strong>还没做完</strong>，但核心系统已就位：94 种武器、23 个角色、1000+ 怪物、武器进化、
+          升级流程、商店、成就、移动端触控。剩下的主要工作是 <strong>设计游戏素材</strong> —— 精灵图、美术、资源，
+          让这些系统真正变成一款有自己风格的游戏。另一部分是测试。
+        </span>
+      </p>
+
+      <div class="tech-tags">
+        <span class="tech-tag">Next.js 16</span>
+        <span class="tech-tag">React 19</span>
+        <span class="tech-tag">TypeScript</span>
+        <span class="tech-tag">Canvas 2D</span>
+        <span class="tech-tag">Vitest</span>
+        <span class="tech-tag">Playwright</span>
+        <span class="tech-tag">Tailwind 4</span>
+        <span class="tech-tag">Agentic engineering</span>
+      </div>
+
+      <!-- Screenshots -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">Screenshots</span>
+          <span class="zh">截图</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">in-game shots</span>
+          <span class="zh">游戏内截图</span>
+        </span>
+      </div>
+
+      <div class="screenshot-grid">
+        <figure class="screenshot-card">
+          <img src="assets/rpg-world/main-menu.png" alt="RPG World main menu with New Game, Shop, Achievements, and Settings buttons" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Main menu</span>
+            <span class="zh">主菜单</span>
+          </figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="assets/rpg-world/character-select.png" alt="RPG World gameplay screenshot showing player, HP bar, and enemies on a green tile map" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Gameplay</span>
+            <span class="zh">游戏画面</span>
+          </figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="assets/rpg-world/gameplay.png" alt="RPG World character selection screen with unlock requirements and stats panel" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Character select</span>
+            <span class="zh">角色选择</span>
+          </figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="assets/rpg-world/game-over.png" alt="RPG World achievements screen with progress bars for monster kill milestones" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Achievements</span>
+            <span class="zh">成就界面</span>
+          </figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="assets/rpg-world/achievements.png" alt="RPG World game over panel showing survival time, level, kills, and play again button" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Game over stats</span>
+            <span class="zh">失败结算</span>
+          </figcaption>
+        </figure>
+        <figure class="screenshot-card">
+          <img src="assets/rpg-world/shop.png" alt="RPG World shop screen with permanent upgrades and character unlock options" loading="lazy" />
+          <figcaption class="screenshot-card-caption">
+            <span class="en">Shop</span>
+            <span class="zh">商店界面</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <!-- Gameplay preview block (large) -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">Gameplay preview</span>
+          <span class="zh">游戏演示</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">video / gif</span>
+          <span class="zh">视频 / GIF</span>
+        </span>
+      </div>
+
+      <div class="placeholder placeholder-large" data-placeholder="rpg-gameplay-video">
+        <span class="placeholder-icon">▶</span>
+        <span class="placeholder-label">Placeholder</span>
+        <span class="placeholder-title">
+          <span class="en">Drop a gameplay video here</span>
+          <span class="zh">在这里放一段游戏演示</span>
+        </span>
+        <span class="placeholder-hint">assets/rpg-world/gameplay.mp4 or gameplay.gif</span>
+      </div>
+
+      <!-- Live progress panel (rendered by script.js from window.RPG_TASKS) -->
+      <div class="block-heading">
+        <h3>
+          <span class="en">Task progress</span>
+          <span class="zh">任务进度</span>
+        </h3>
+        <span class="block-sub">
+          <span class="en">live from rpg-world/tasks.json</span>
+          <span class="zh">从 rpg-world/tasks.json 同步</span>
+        </span>
+      </div>
+
+      <div id="rpg-progress" class="rpg-progress">
+        <!-- JS will fill this in. Fallback content shown if JS fails: -->
+        <p style="color: var(--text-muted); font-family: var(--font-mono); font-size: 0.85rem; text-align: center;">
+          <span class="en">Loading task progress…</span>
+          <span class="zh">正在加载任务进度……</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       Footer
+       ============================================================ -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-text">
+        <span class="en">Built with plain HTML &amp; CSS · Hosted on GitHub Pages · 2026</span>
+        <span class="zh">用纯 HTML &amp; CSS 构建 · 部署于 GitHub Pages · 2026</span>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/cai-zhuo" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://clawhub.ai/cai-zhuo/materials-cli" target="_blank" rel="noopener">ClawHub</a>
+        <a href="https://www.npmjs.com/package/declare-render" target="_blank" rel="noopener">npm</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts: data first, then renderer -->
+  <script src="data/rpg-tasks.js?v=20260409"></script>
+  <script src="data/cases.js?v=20260409"></script>
+  <script src="script.js"></script>
+
+  <!-- Live declare-render renders of the featured Good Cases -->
+  <script type="module">
+    let Renderer;
+    try {
+      ({ Renderer } = await import("./vendor/declare-render/browser.js"));
+    } catch (err) {
+      console.error("[live] failed to load declare-render:", err);
+      const msg = "Could not load declare-render. Run <code>node scripts/vendor-declare-render.mjs</code>.";
+      ["case-featured-status", "case-featured-2-status", "case-featured-3-status", "case-featured-4-status"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.innerHTML = '<span style="color:#9aa0a6;">' + msg + "</span>";
+      });
+      throw err;
+    }
+
+    // Wait for the web fonts the cases use so canvas text doesn't fall back
+    // to a system font. Best-effort — proceed even if it times out.
+    try {
+      if (document.fonts && document.fonts.load) {
+        await Promise.race([
+          Promise.all([
+            document.fonts.load("64px Montserrat"),
+            document.fonts.load("bold 64px Montserrat"),
+            document.fonts.load("44px \"Playfair Display\""),
+          ]),
+          new Promise((r) => setTimeout(r, 1500)),
+        ]);
+      }
+    } catch (_) {
+      /* ignore */
+    }
+
+    // Generic helper: render a schema by key into a wrapper element.
+    async function renderCaseInto(wrapperId, statusId, key) {
+      const wrapper = document.getElementById(wrapperId);
+      const status = document.getElementById(statusId);
+      function setError(msg) {
+        if (status) {
+          status.innerHTML = '<span style="color:#9aa0a6;">' + msg + "</span>";
+        }
+      }
+      try {
+        const schema = window.GOOD_CASES && window.GOOD_CASES[key];
+        if (!schema) {
+          setError(`No case data found for "${key}". Check data/cases.js.`);
+          return;
+        }
+        const renderer = new Renderer(schema);
+        await renderer.render();
+        const canvas = renderer.getCanvasElement();
+        if (!canvas) {
+          setError("Renderer did not return a canvas element.");
+          return;
+        }
+        wrapper.removeChild(status);
+        wrapper.appendChild(canvas);
+      } catch (err) {
+        console.error(`[case ${key}] render failed:`, err);
+        setError(
+          `Failed to render: ${err && err.message ? err.message : err}`
+        );
+      }
+    }
+
+    // Render both featured cases in parallel.
+    await Promise.all([
+      renderCaseInto("case-featured", "case-featured-status", "coffee-shop"),
+      renderCaseInto("case-featured-2", "case-featured-2-status", "floral-spring"),
+      renderCaseInto("case-featured-3", "case-featured-3-status", "rosvine-poster"),
+      renderCaseInto("case-featured-4", "case-featured-4-status", "manner-coffee-poster-v2"),
+    ]);
+  </script>
+</body>
+</html>
