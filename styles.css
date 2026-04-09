@@ -754,6 +754,23 @@ body[data-lang="zh"] .en {
   gap: 12px;
   margin-bottom: 16px;
 }
+
+.mp-illustration {
+  margin: 0 0 20px;
+  text-align: center;
+}
+.mp-illustration img {
+  max-width: 360px;
+  width: 100%;
+  border-radius: var(--r-md);
+  border: 1px solid var(--border);
+}
+.mp-illustration figcaption {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
 .mp-num {
   display: inline-flex;
   align-items: center;
