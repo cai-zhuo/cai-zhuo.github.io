@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVENT LOOP · Cai Zhuo</title>
+  <meta name="description" content="EVENT LOOP — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">EVENT LOOP</h1>
+      <div class="blog-meta">
+        <time datetime="2020-04-04">2020-04-04</time>
+        <span>·</span>
+        <span>2 min read</span>
+      </div>
+      <div class="blog-content">
+<h2 id="在javascript运行机制中依赖event-loop决定代码先后执行的顺序">在JavaScript运行机制中，依赖EVENT LOOP，决定代码先后执行的顺序。</h2>
+<p>Javascript执行过程</p>
+<ol>
+<li>执行栈内任务，遇到setTimeout，setImmediate，等API，将回调放入宏队列，遇到process.nextTick,Promise等，将回调放入微队列</li>
+<li>将微队列的任务逐个推入主线程，将遇到的API回调放入相应队列</li>
+<li>微队列空时并且栈空，将宏队列的任务逐个推到主线程</li>
+<li>宏队列空时，将微队列的任务推入主线程（在nodeJS中，宏队列的每个阶段执行完毕时，都会去执行微队列）</li>
+<li>直到所有队列任务执行完毕。</li>
+</ol>
+<ul>
+<li>
+<p>javaScript中。分为主线程（STACK），其他线程（WEB APIs,others），宏队列（macrotask），微队列(microtask)。</p>
+</li>
+<li>
+<p>区别</p>
+<ol>
+<li>
+<p>在浏览器中，微队列可以认为在宏队列之内</p>
+<img src="https://segmentfault.com/img/remote/1460000016278118?w=710&amp;h=749" alt="browser-eventloop" style="zoom: 67%;" />
+</li>
+<li>
+<p>在nodeJS中，微队列在宏队列之间，宏队列和微队列分为各个不同的队列</p>
+<p>各队列同样依靠一个循环来决定执行顺序。</p>
+<p><mark>宏队列</mark></p>
+<img src="https://segmentfault.com/img/remote/1460000016278121?w=951&amp;h=526" alt="node-eventloop" style="zoom: 80%;" />
+<p><mark>微队列</mark></p>
+ <img src="https://segmentfault.com/img/remote/1460000016278122?w=420&amp;h=433" alt="node-microtaskqueue" style="zoom: 80%;" /> 
+</li>
+<li>
+<p>在微队列中，NextTick QUeue优先于Other Micro Queue</p>
+</li>
+<li>
+<p>在微队列周期中，新的任务进入了队列，那么这个任务也将在这个周期执行，但在宏队列中不是。</p>
+</li>
+<li>
+<p>只有在栈空的时候才会考虑宏队列和微队列的任务</p>
+<p>所以在事件执行时，手动触发 和 代码执行执行的顺序会有区别</p>
+<pre><code class="language-js">div.addEventListener('click',()=&gt;{
+    Promise.resolve().then(()=&gt;{
+    	console.log(&quot;resolved&quot;);
+	})
+    setTimeout(()=&gt;{
+        console.log(&quot;timeout&quot;)
+    },0)
+})
+//方案1:
+//tap twice  ...
+//方案2:
+//click();
+//click()
+</code></pre>
+<p>结果如下</p>
+<ul>
+<li>
+<p>tap twice..</p>
+<blockquote>
+<p>resolved</p>
+<p>timeout</p>
+<p>resolved</p>
+<p>timeout</p>
+</blockquote>
+</li>
+<li>
+<p>run click() twice</p>
+<blockquote>
+<p>resolved</p>
+<p>resolved</p>
+<p>timeout</p>
+<p>timeout</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

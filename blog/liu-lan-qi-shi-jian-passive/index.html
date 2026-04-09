@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>浏览器事件-passive · Cai Zhuo</title>
+  <meta name="description" content="浏览器事件-passive — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">浏览器事件-passive</h1>
+      <div class="blog-meta">
+        <time datetime="2020-05-18">2020-05-18</time>
+        <span>·</span>
+        <span>2 min read</span>
+      </div>
+      <div class="blog-content">
+<h1 id="浏览器事件-passive">浏览器事件-passive</h1>
+<h2 id="targetaddeventlistnertypecallbackoptions">target.addEventListner('type',callback,options)</h2>
+<h3 id="options">options</h3>
+<ul>
+<li>capture : 是否在事件的捕获阶段出发</li>
+<li>once ： 最多只调用一次</li>
+<li>passive ： 设置为true时，表示Listener永远不会调用preventDefault。如果listener仍调用，浏览器会在控制台发出一个警告。（MDN）</li>
+</ul>
+<h3 id="preventdefault">preventDefault</h3>
+<blockquote>
+<p>如果此事件没有被显式处理，它默认的动作也不应该照常执行。此事件还是继续传播，除非碰到事件侦听器调用stopPropagation() 或stopImmediatePropagation()，才停止传播。        ---MDN</p>
+</blockquote>
+<h3 id="render-process">render process</h3>
+<p>在MDN文档中，对于passive和preventDefault只有简单的介绍，也就是简单的说明，preventDefault会组织默认事件，而passive表明我不会阻止默认事件。<br>
+而在render process Compositing阶段，为了加速渲染，采用的是合成器渲染。也就是将一个页面分成多个图层，分别光栅化（渲染）。然后绘制成一个帧。<br>
+假如在页面中，进行滚动，合成器就会预先将没有显示的部分，分层，光栅化，合成，发送到GPU，有GPU负责显示。<br>
+如果我又在document元素上监听了scroll事件，此时，合成器就会先等待主线程执行JS，然后再进行上述操作，这样无疑会拖慢整个过程的平滑程度，甚至会出现掉帧。<br>
+对合成器来说，监听事件的Dom对象所属的区域，称为 <strong>非快速滚动区域</strong> ，也就是执行慢的区域。<br>
+而在监听事件中配置 passive : true.<br>
+就会告诉合成器，这个地方可以先进行 分层，光栅化，合成，等一些列操作，等到事件出发的时候发送到GPU。而不用等待主线程执行完毕。</p>
+<pre><code class="language-js">document.addEventListener('click',()=&gt;{},{passive:true});
+</code></pre>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

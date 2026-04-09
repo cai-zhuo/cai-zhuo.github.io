@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Async 异步函数书写习惯 · Cai Zhuo</title>
+  <meta name="description" content="Async 异步函数书写习惯 — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">Async 异步函数书写习惯</h1>
+      <div class="blog-meta">
+        <time datetime="2020-10-30">2020-10-30</time>
+        <span>·</span>
+        <span>2 min read</span>
+      </div>
+      <div class="blog-content">
+<p>原理不做解释，请查文档</p>
+<p>平时 async，await 的书写习惯的不同，会导致任务的表现不同</p>
+<pre><code class="language-js">// 两个计时函数之间是阻塞的
+async function syncWait() {
+  console.time('阻塞执行 syncWait');
+
+  await wait(500);
+  await wait(500);
+
+  console.timeEnd('阻塞执行 syncWait');
+}
+
+// 两个计时函数之间是非阻塞的
+async function asyncWait() {
+  console.time('非阻塞执行 asyncWait');
+  
+  const timeout1 = wait(500);
+  const timeout2 = wait(500);
+
+  await timeout1;
+  await timeout2;
+
+  console.timeEnd('非阻塞执行 asyncWait');
+}
+
+async function wait(time) {
+  return new Promise((resolve) =&gt; {
+    setTimeout(() =&gt; {
+      resolve('timeout');
+    }, time);
+  });
+}
+
+syncWait();
+asyncWait();
+
+</code></pre>
+<blockquote>
+<p>非阻塞执行 asyncWait: 505.733ms</p>
+<p>阻塞执行 syncWait: 1011.382ms</p>
+</blockquote>
+<p>当有多个异步操作的情景下，书写习惯习惯是这样的</p>
+<pre><code class="language-js">async function multiAsyncOpt(){
+  const { data:info } = await api.get('/getInfo');
+  const { data:detail } = await api.get('/getDetail');
+  return [info,detail];
+}
+</code></pre>
+<p>但是这样书写，multiAsyncOpt 的花费总时长是两个异步函数时长的总和，即</p>
+<blockquote>
+<p>time( multiAsyncOpt ) = time( getInfo ) + time( getDetail )</p>
+</blockquote>
+<p>所以我们可以这样书写</p>
+<pre><code class="language-js">async function multiAsyncOpt(){
+	const getInfo = api.get('/getInfo');  
+  const getDetail = api.get('/getDetail');
+  
+  const { data:info } = await getInfo;
+  const { data:detail } = await getDetail;
+  
+  return [info,detail]
+}
+</code></pre>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

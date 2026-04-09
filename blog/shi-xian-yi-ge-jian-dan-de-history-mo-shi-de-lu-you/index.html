@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>History模式的路由 · Cai Zhuo</title>
+  <meta name="description" content="History模式的路由 — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">History模式的路由</h1>
+      <div class="blog-meta">
+        <time datetime="2020-04-06">2020-04-06</time>
+        <span>·</span>
+        <span>3 min read</span>
+      </div>
+      <div class="blog-content">
+<p>用一个类来实现简单的页面history模式路由。</p>
+<ol>
+<li>
+<p>实现一个类</p>
+<pre><code class="language-js">class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.querySelectorAll(&quot;[href]&quot;)
+        this.view = document.querySelector('#router-view');
+    }
+    
+	route(event) {
+        //简单的监听a标签
+    	const path = event.target.getAttribute('href')
+        event.preventDefault();
+        history.pushState({
+        	[path]: path
+		}, null, path)
+    }
+    
+}
+</code></pre>
+</li>
+<li>
+<p>监听popState事件</p>
+<pre><code class="language-js">class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.querySelectorAll(&quot;[href]&quot;)
+        this.view = document.querySelector('#router-view');
+        window.onpopstate = this.watchPopState
+    }
+    
+	route(event) {
+        //简单的监听a标签
+    	const path = event.target.getAttribute('href')
+        event.preventDefault();
+        history.pushState({
+        	[path]: path
+		}, null, path)
+    }
+    
+    watchPopState() {
+        console.log('stoped')
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>由于 pushState 和 replaceState 方法不能被 popState 事件监听到，所以需要重写方法并实现监听</p>
+<pre><code class="language-js">class Router{
+    links
+    view
+   
+    constructor(){
+        this.links = document.querySelectorAll('[href]')
+        this.view = document.querySelector('#router-view');
+        
+        window.onpopstate = this.watchPopState
+        //初始的history.State 为null
+		//个人猜测，在history路由下，Vue打包后需要Nginx重定向就是因为如此，
+        //刷新将找不到路径 / 下的资源
+        history.pushState({
+        	''/'':'/'
+		},null)
+        
+        history.pushState = this.registry_history_event('pushState');
+        history.replaceState = this.registry_history_event('replaceState');
+        
+        //使用bind是为了更方便的使用实例对象，在window上监听事件会将this指向window
+        //这里不能使用window.onpushstate,会失效，在window上并没有这个方法，不会触发事件的监听
+        window.addEventListener('pushState', this.onpushState.bind(this))
+		window.addEventListener('replaceState', this.onreplaceState.bind(this))
+    }
+    
+	route(event) {
+        //简单的监听a标签
+    	const path = event.target.getAttribute('href')
+        event.preventDefault();
+        //第二个参数是标题
+        //第三个参数是将路径加入到导航栏
+        history.pushState({
+        	[path]: path
+		}, null, path)
+    }
+    
+    watchPopState() {
+        console.log('stoped')
+    }
+    onpushState(event) {
+		console.log(&quot;pushed state&quot;)
+        this.view.innerHTML = event.arguments[2];
+	}
+
+	onreplaceState(event) {
+		console.log(&quot;replaced state&quot;)
+        this.view.innerHTML = event.arguments[2];
+    }
+    
+    registry_history_event(type) {
+		const origin_fun = history[type];
+		//origin_fun 执行的顺序将决定 事件回调和事件发生的先后顺序
+        //比如改为 return origin_fun.call(this,...arguments)
+        return function() {
+		const result = origin_fun.call(this, ...arguments);
+        	const e = new Event(type);
+            //将参数传给事件
+			e.arguments = arguments;
+            //在window对象上触发事件
+            window.dispatchEvent(e);
+            return result;
+	    }
+	}
+}
+</code></pre>
+</li>
+<li>
+<p>当自己想实现私有方法时，可以使用闭包</p>
+<pre><code class="language-js">const router = (()=&gt;{
+    const private_function = ()=&gt;{
+        //...
+    }
+    class Router{
+        //...
+    }
+    return new Router();
+}())
+</code></pre>
+</li>
+<li>
+<p>而私有变量的实现就灵活的多，可以使用Symbol，WeakSet，闭包</p>
+<pre><code class="language-js">//Symbol + 闭包
+const router = (()=&gt;{
+    const private_variable = Symbol();
+    class Router{
+        [private_variable] = &quot;some value&quot;
+        //...
+    }
+    return new Router();
+}())
+</code></pre>
+<pre><code class="language-js">//WeakMap + 闭包
+const router = (()=&gt;{
+    const private_variable = new WeakMap()
+    class Router{
+        constructor(){
+	        private_variable.set(&quot;key&quot;,&quot;value&quot;)
+        }
+    }
+    return new Router()
+}())
+</code></pre>
+</li>
+</ol>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

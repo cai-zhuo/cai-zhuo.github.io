@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>react 配置 less · Cai Zhuo</title>
+  <meta name="description" content="react 配置 less — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">react 配置 less</h1>
+      <div class="blog-meta">
+        <time datetime="2020-06-04">2020-06-04</time>
+        <span>·</span>
+        <span>1 min read</span>
+      </div>
+      <div class="blog-content">
+<h1 id="导出webpack配置文件">导出webpack配置文件</h1>
+<blockquote>
+<p>yarn run eject<br>
+在生成的config目录下修改webpack.config.js<br>
+在 rules 中 cassLoader 下添加</p>
+</blockquote>
+<pre><code class="language-js">    let lessRegex = /\.less$/;
+    let lessModuleRegex = /\.module\.less$/;
+    //...
+    {
+            test:lessRegex,
+            exclude: lessModuleRegex,
+            use: getStyleLoaders(
+                {
+                    importLoaders: 3,
+                    sourceMap: isEnvProduction &amp;&amp; shouldUseSourceMap,
+                },
+                'less-loader'
+            )
+    },
+    {
+              test: lessModuleRegex,
+              use: getStyleLoaders(
+                  {
+                    importLoaders: 3,
+                    sourceMap: isEnvProduction &amp;&amp; shouldUseSourceMap,
+                    localsConvention: 'camelCase',
+                    modules: {
+                      getLocalIdent: getCSSModuleLocalIdent,
+                    },
+                  },
+                  'less-loader',
+              ),
+            },
+</code></pre>
+<p>正常来说 css-modules ，文件命名为 index.module.less<br>
+如果使 index.less 也具有 css-modules 的效果，就将 lessModuleRegex 换成 lessRegex ，并且去掉上一个 lessLoader 模块。</p>
+<blockquote>
+<p>yarn run start</p>
+</blockquote>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

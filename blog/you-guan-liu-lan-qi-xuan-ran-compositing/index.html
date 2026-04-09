@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>有关浏览器渲染（Compositing） · Cai Zhuo</title>
+  <meta name="description" content="有关浏览器渲染（Compositing） — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">有关浏览器渲染（Compositing）</h1>
+      <div class="blog-meta">
+        <time datetime="2020-05-20">2020-05-20</time>
+        <span>·</span>
+        <span>3 min read</span>
+      </div>
+      <div class="blog-content">
+<h2 id="浏览器渲染的过程">浏览器渲染的过程</h2>
+<p>当浏览器拿到HTTP响应的HTML文件时，会去解析HTML的DOM结构。生成DOM Tree</p>
+<p>对于解析到的link 标签，会进行并行下载，下载完成后解析，style标签会直接解析，link,style标签中的样式资源会生成 CSS Rule Tree。</p>
+<p>而script标签分为三种情况。</p>
+<ul>
+<li>default	同步下载，暂停解析DOM结构</li>
+<li>defer	异步下载，DOM解析完毕以后，执行JS文件</li>
+<li>async     异步下载，下载完毕立即执行JS文件</li>
+</ul>
+<p>当浏览器启动渲染时，会走一个如下的机制。</p>
+<p>​																		<br>
+JS(AST,JIT)	--&gt;	宏脚本执行	--&gt;	Micro Task	--&gt;	Macro Task	--&gt;</p>
+<p>DOM Tree + CSS Rule Tree	--&gt;	Render Tree	--&gt;	Layout	--&gt;	Paint	--&gt;	Compositing</p>
+<ul>
+<li>Render Tree	由Dom和CSS计算出的dom节点应具有的样式树</li>
+<li>Layout      计算Dom节点的布局</li>
+<li>Paint         计算DOm节点的渲染样式</li>
+<li>Compositing   计算整个渲染过程可以分为几个图层，有合成器线程来执行。</li>
+</ul>
+<p>在这个过程执行完毕，又会回到Event Loop阶段，如果发生了对Dom的操作，将会判断回不回去走后续的流程，否则会一直循环在Event Loop。比如：</p>
+<ul>
+<li>Dom的布局发生了变化，会到Layout阶段（回流/reflow）</li>
+<li>Dom的某些不影响布局的样式发生变化，回到Paint阶段（重绘/repaint）</li>
+<li>对于那些属性会触发回流或者重绘，可以参考
+<ul>
+<li>https://www.html5rocks.com/zh/tutorials/speed/high-performance-animations/</li>
+</ul>
+</li>
+</ul>
+<p>对于Compositing阶段，浏览器中的Render Process，会分出一个 合成器线程，将整个渲染页面分多个图层来绘制（光栅化），然后将每个图层的纹理都交给GPU来渲染，不去让CPU计算渲染像素的规则，达到“加速”渲染的效果。</p>
+<p>我们常用的CSS硬件加速（GPU加速）就是上述所说的策略</p>
+<p>出发该策略有很多种方式，但也很复杂。我们可以采用最简单的一种方式。</p>
+<ul>
+<li>触发CSS的3D变换</li>
+</ul>
+<pre><code class="language-css">.cube {
+   -webkit-transform: translateZ(0);
+   -moz-transform: translateZ(0);
+   -ms-transform: translateZ(0);
+   -o-transform: translateZ(0);
+   transform: translateZ(0);
+   /* Other transform properties here */
+}
+</code></pre>
+<blockquote>
+<p>https://www.cnblogs.com/rubylouvre/p/3471490.html</p>
+</blockquote>
+<ul>
+<li>will-change属性</li>
+</ul>
+<pre><code class="language-css">div{
+  will-change:auto;	
+}
+/*
+	will-change 的值是告诉浏览器有哪些属性会变化，auto就是让浏览器自己判断。
+*/
+</code></pre>
+<h2 id="调试">调试</h2>
+<p>对于浏览器渲染的调试，我们可以打开开发者工具</p>
+<ul>
+<li>按下ESC，在console旁边有 三个点 的可点击区域</li>
+<li>点击 Rendering</li>
+<li>勾选 Paint Flashing，Layout ，Layer</li>
+</ul>
+<p>我们就可以分别看到 重绘，回流，和 分层 的情况了。</p>
+<h2 id="补充">补充</h2>
+<p>在浏览器的某些事件中，会因等待JS的执行，判断是否阻止了事件的默认行为。<br>
+这样的话，就不会立即交付任务与合成器线程，也就拖慢了渲染的速度。<br>
+我们可以通过给事件加上 options 的 passive :true 选项,来告知浏览器，开发者不会阻止浏览器的默认行为，从而直接交付给合成器线程。</p>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

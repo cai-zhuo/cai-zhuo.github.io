@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Javascript 技巧收集 · Cai Zhuo</title>
+  <meta name="description" content="Javascript 技巧收集 — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">Javascript 技巧收集</h1>
+      <div class="blog-meta">
+        <time datetime="2020-04-04">2020-04-04</time>
+        <span>·</span>
+        <span>2 min read</span>
+      </div>
+      <div class="blog-content">
+<blockquote>
+<p>补充：2020/5/20<br>
+慎用 “|” 用来取整<br>
+“数字一大就GG了，性能和Math.floor()不相上下”<br>
+2020/8/21<br>
+JS中慎用位运算，JS中的位运算继承自JAVA，采取的是用 int 类型进行位运算，但是JS中只有 double 类型，需要从double转换成int，所以会很耗时，性能就显得不那么出色，并且数字变大以后会出现错误。<br>
+但是在node中，如果涉及大量的位运算，可以采取编写C++来嵌入进node中，以此来提高性能。</p>
+</blockquote>
+<ol>
+<li>
+<p>js通过valueOf获取引用类型的数字，toString获取引用类型的字符串</p>
+</li>
+<li>
+<p>Math.floor (4.9) === 4</p>
+<p>~~   4.9 ===  4</p>
+<p>~~ - 4.9 === -5</p>
+</li>
+<li>
+<p>取整 | 0</p>
+<p>1.3 | 0 ===  1</p>
+<p>-1.3 | 0 === -1</p>
+</li>
+<li>
+<p>判断奇偶数</p>
+<p>const num = 3</p>
+<p>!! (num &amp; 1) === true</p>
+<p>!! (num % 2) === true</p>
+</li>
+<li>
+<p>强制参数（mandatory）</p>
+<pre><code class="language-js">const mandatory = ()=&gt;{
+    throw new Error('Missing Parameter!')
+}
+
+const foo = (bar = mandatory())=&gt;{
+    return bar;
+}
+</code></pre>
+</li>
+<li>
+<p>惰性载入函数</p>
+<p>通过覆写函数，使得下一次不用再进行判断</p>
+<pre><code class="language-js">function foo(){
+    if(a != b){
+        console.log('a')
+    }else{
+        console.log('b')
+    }
+}
+//优化后
+function foo(){
+    if(a != b){
+        foo = function(){
+            console.log('a')
+        }
+    }else{
+        foo = function(){
+            console.log('b')
+        }
+    }
+    foo();	// or return foo()
+}
+</code></pre>
+</li>
+<li>
+<p>一次性函数</p>
+<pre><code class="language-js">let foo = ()=&gt;{
+    console.log('1')
+    foo = ()=&gt;{
+        console.log('2')
+    }
+}
+</code></pre>
+</li>
+<li>
+<p>按位取反巧用</p>
+<pre><code class="language-js">~ 0  === -1  //true
+~-1 ===   0 //true
+
+const arr = [1,2,3];
+~arr.indexOf(4) ? null :arr.push(4) ;
+</code></pre>
+</li>
+</ol>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>

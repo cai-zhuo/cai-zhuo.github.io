@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>对图片进行转码（DataURL） · Cai Zhuo</title>
+  <meta name="description" content="对图片进行转码（DataURL） — Cai Zhuo 的旧博客存档。" />
+  <link rel="icon" type="image/svg+xml" href="../../assets/favicon.svg" />
+  <link rel="stylesheet" href="../../styles.css" />
+</head>
+<body data-lang="zh">
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../index.html" style="text-decoration:none;">
+        <span class="brand-dots" aria-hidden="true">
+          <span class="brand-dot"></span>
+          <span class="brand-dot"></span>
+        </span>
+        <span>Cai Zhuo</span>
+      </a>
+      <nav class="topbar-nav">
+        <a href="../index.html">← All writing</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="blog-page">
+    <article class="blog-article container">
+      <div class="blog-eyebrow">Archive · 2020</div>
+      <h1 class="blog-title">对图片进行转码（DataURL）</h1>
+      <div class="blog-meta">
+        <time datetime="2020-10-29">2020-10-29</time>
+        <span>·</span>
+        <span>2 min read</span>
+      </div>
+      <div class="blog-content">
+<p>对图片进行转码，是一种常见的操作，用来减少应用加载过程中，网络请求的数量。</p>
+<pre><code class="language-html">&lt;img src=&quot;data:image/svg+xml;base64,[data]&quot;&gt;
+</code></pre>
+<p>在 src 所指定的字符串中，是一段 base64 编码的字符串。我们称这一段字符串为 DataURL</p>
+<ul>
+<li>优点
+<ol>
+<li>减少HTTP请求</li>
+<li>cpu的计算速度 要快于 网络请求的速度</li>
+</ol>
+</li>
+<li>缺点
+<ol>
+<li>与来自外部 <code>src</code> 的图像相比，在移动设备上 Data URI 格式图像的显示速度要<a href="https://www.mobify.com/blog/data-uris-are-slow-on-mobile/">慢得多</a>。</li>
+<li>Data URI 会显著增加 HTML 请求的大小。</li>
+<li>Data URI 会增加HTML标记和工作流的复杂性。</li>
+<li>Data URI 格式的图像比二进制格式的图像大很多（最多大 <strong>30%</strong>），因此不会减小总下载大小。</li>
+<li>Data URI 无法缓存，因此必须为使用它们的每一个页面分别进行下载。</li>
+<li>IE 6 和 7 不支持 Data URI，IE8 仅提供有限支持。</li>
+<li>对于 HTTP/2，减少请求的次数并不是优化网络的优先策略。</li>
+</ol>
+</li>
+</ul>
+<p>所以对图片的转码还应视情景而定。可以对小图片进行转码，比如在webpack的 url-loader 中，经常会对小于10kb的图片进行DataURL转码，来减少网络请求。</p>
+
+      </div>
+      <div class="blog-footer-nav">
+        <a href="../index.html">← Back to all writing</a>
+      </div>
+    </article>
+  </main>
+</body>
+</html>
