@@ -89,8 +89,20 @@
     const completed = data.completed || [];
     const inProgress = data.inProgress || [];
     const todo = data.todo || [];
-    const total = completed.length + inProgress.length + todo.length;
-    const percent = total > 0 ? Math.round((completed.length / total) * 100) : 0;
+
+    // Weighted progress: design=2, test=2, develop=1
+    const TEST_RE = /测试|test|E2E|Playwright/i;
+    const DESIGN_RE = /素材|音效|音乐|音频|设计|数值.*图标/i;
+    function taskWeight(t) {
+      const n = t.name || "";
+      if (TEST_RE.test(n)) return 2;
+      if (DESIGN_RE.test(n)) return 2;
+      return 1;
+    }
+    const allTasks = [...completed, ...inProgress, ...todo];
+    const totalWeight = allTasks.reduce((s, t) => s + taskWeight(t), 0);
+    const completedWeight = completed.reduce((s, t) => s + taskWeight(t), 0);
+    const percent = totalWeight > 0 ? Math.round((completedWeight / totalWeight) * 100) : 0;
 
     container.innerHTML = "";
 
