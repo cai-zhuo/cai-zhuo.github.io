@@ -1,4 +1,15 @@
 /* ============================================================
+   Web fonts
+   ============================================================ */
+@font-face {
+  font-family: "STKaiti";
+  src: url("assets/fonts/STKaiti.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+/* ============================================================
    Design tokens
    ============================================================ */
 :root {

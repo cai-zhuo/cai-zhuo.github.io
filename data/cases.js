@@ -42,7 +42,7 @@ window.GOOD_CASES = {
         "width": 200,
         "height": 1200,
         "style": {
-          "fontName": "BiauKaiTC-Regular",
+          "fontName": "STKaiti",
           "fontSize": 180,
           "color": "#1a1a1a",
           "fontWeight": "normal",

@@ -20,6 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="preload" href="assets/fonts/STKaiti.woff2" as="font" type="font/woff2" crossorigin />
 </head>
 <body data-lang="en">
 
@@ -639,7 +640,8 @@
     }
 
     // Wait for the web fonts the cases use so canvas text doesn't fall back
-    // to a system font. Best-effort — proceed even if it times out.
+    // to a system font. STKaiti is subset to ~1.6 KB so this is near-instant.
+    // Best-effort — proceed even if it times out.
     try {
       if (document.fonts && document.fonts.load) {
         await Promise.race([
@@ -647,6 +649,7 @@
             document.fonts.load("64px Montserrat"),
             document.fonts.load("bold 64px Montserrat"),
             document.fonts.load("44px \"Playfair Display\""),
+            document.fonts.load("180px \"STKaiti\"", "春启万象"),
           ]),
           new Promise((r) => setTimeout(r, 1500)),
         ]);
